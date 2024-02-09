@@ -77,6 +77,7 @@
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
 
+        <ProgressBar x:Name="progresoCircular" Style="{StaticResource MaterialDesignCircularProgressBar}"  Visibility="Collapsed" />
 
         <materialDesign:Card  Margin="10,20,10,10" materialDesign:ElevationAssist.Elevation="Dp8" Grid.Row="0">
             <TabControl  materialDesign:ColorZoneAssist.Mode="PrimaryMid" Style="{StaticResource MaterialDesignFilledTabControl}"

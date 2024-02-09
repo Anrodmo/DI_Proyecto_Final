@@ -1,5 +1,7 @@
 ﻿using DI_Proyecyo_Final.Model;
 using DI_Proyecyo_Final.ViewModel;
+using Google.Protobuf.WellKnownTypes;
+using MahApps.Metro.Controls.Dialogs;
 using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
@@ -40,6 +42,11 @@ namespace DI_Proyecyo_Final
             // se añaden los contextos de datos de los validadores y los notificadores de los textboxes
             var contenedor = new ContenedorDataContext();
             contenedor.CambioEnTexto = new NotificacionCambioEnTextBoxes();
+            contenedor.FechaCorrecta = new NotificacionFechaCorrecta();
+            DataContext = contenedor;
+
+            agregarEventoATextBoxes(); // agrego  todos los textboxes a un evento comun para que cuando ninguno tenga error
+                                       // se habilite el boton de modificar
 
             dataGridPropietarios.Items.Clear();
             listaPropietarios = Propietario.obtenerListaPropietarios();
@@ -49,13 +56,15 @@ namespace DI_Proyecyo_Final
                 miDialogHost1btn.IsOpen = true;
             }
             else
-            {
+            {   // aqui uso CollectionView porque quiero aplicar filtros al datagrid
                 viewPropietarios = (CollectionView)CollectionViewSource.GetDefaultView(listaPropietarios);
                 dataGridPropietarios.ItemsSource = viewPropietarios;
             }
 
 
         }
+
+        
 
 
         /*==============================================================================================================================*/
@@ -72,22 +81,26 @@ namespace DI_Proyecyo_Final
         /// <param name="e"></param>
         private void dataGridPropietarios_Selected(object sender, EventArgs e)
         {
+            habilitarCampos(false);
             this.propietarioSeleccionado = dataGridPropietarios.SelectedItem as Propietario; // recuperamos el usuario seleccinado
-            rellenarCampos(this.propietarioSeleccionado);  //  rellenamos los campos con su informacion
-        
-            // habilitamos botones 
-            
-            // deshabilitamos entradas de datos
-            
-            // ocultamos iconos de verificacion
-            
+            if (this.propietarioSeleccionado != null)
+            {
+                rellenarCamposGestion(this.propietarioSeleccionado);  //  rellenamos los campos con su informacion
+
+                // habilitamos botones 
+                btnIrAPropiedades.IsEnabled = true;
+                btnInformesPropietario.IsEnabled = true;
+
+                btnAñadirPropiedad.IsEnabled = true;
+                btnEditarPropietario.IsEnabled = true;
+                btnActualizarPropietarios.IsEnabled = false;
+                btnBorrarPropietario.IsEnabled = true;
+                // deshabilitamos entradas de datos
+
+            }
             // reiniciamos variables de control y campos de contraseña
-            
-            
-            // eliminamos errores de campo de contraseña
-            
-
-
+            this.opActual = OperacionActual.None;
+         
         }
 
         /// <summary>
@@ -106,6 +119,19 @@ namespace DI_Proyecyo_Final
         /// </summary>
         private void refrescarDataGrid()
         {
+            // vaciamos campos y dehabilitamos botones y campos
+            vaciarCampos();   
+            habilitarCampos(false);
+            btnIrAPropiedades.IsEnabled = false;
+            btnInformesPropietario.IsEnabled = false;
+
+            btnAñadirPropiedad.IsEnabled = false;
+            btnEditarPropietario.IsEnabled = false;
+            btnGuardarPropietario.IsEnabled = false;
+
+            btnBorrarPropietario.IsEnabled = false;
+
+            dataGridPropietarios.UnselectAll();
             listaPropietarios = Propietario.obtenerListaPropietarios();
             if (listaPropietarios is null) // recojo el null desde Controlador si hay fallo en conexión
             {
@@ -115,37 +141,69 @@ namespace DI_Proyecyo_Final
             }
             else
             {
-                //dataGridPropietarios.Items.Clear();
+                
                 viewPropietarios = (CollectionView)CollectionViewSource.GetDefaultView(listaPropietarios);
                 dataGridPropietarios.ItemsSource = viewPropietarios;
             }
 
-            vaciarCampos();   // vaciamos campos y dehabilitamos botones
-            btnInformesPropietario.IsEnabled = false;
-            btnAñadirPropiedad.IsEnabled = false;
-            btnEditarPropietario.IsEnabled = false;
-            btnGuardarPropietario.IsEnabled = false;           
-            btnBorrarPropietario.IsEnabled = false;
-            
-            
-            
             // ocultamos los iconos de verificacion de campos
-           
+
             // reinciamos las variables de control
-           
+            this.propietarioSeleccionado = null;
+            this.opActual = OperacionActual.None;
             // eliminamos los errores de los  bindings de nombre y contraseña
-           
+
         }
 
-        private void rellenarCampos(Propietario propietarioSeleccionado)
+        private void rellenarCamposGestion(Propietario propietario)
         {
-            throw new NotImplementedException();
+            txtNIFPropietarioGestion.Text = propietario.NIF;
+            txtNombrePropietarioGestion.Text=propietario.Nombre;
+            txtApellidosPropietarioGestion.Text = propietario.Apellidos;
+            txtEmailPropietarioGestion.Text =propietario.Email;
+            txtTelefonoPropietarioGestion.Text = propietario.Telefono.ToString();
+            dpickerFechaAlta.SelectedDate = propietario.Fecha_alta;
+            txtCallePropietarioGestion.Text = propietario.Direccion.Calle;
+            txtBloquePropietarioGestion.Text = propietario.Direccion.Bloque;
+            txtPisoPropietarioGestion.Text = propietario.Direccion.Piso;
+            txtCodigoPostalPropietarioGestion.Text = propietario.Direccion.CodPostal;
+            txtLocalidadPropietarioGestion.Text = propietario.Direccion.Localidad;
+            txtProvinciaPropietarioGestion.Text = propietario.Direccion.Provincia;
         }
-
         private void vaciarCampos()
         {
+            txtNIFPropietarioGestion.Text = "";
+            txtNombrePropietarioGestion.Text = "";
+            txtApellidosPropietarioGestion.Text = "";
+            txtEmailPropietarioGestion.Text = "";
+            txtTelefonoPropietarioGestion.Text = "";
+            dpickerFechaAlta.SelectedDate = null;
+            txtCallePropietarioGestion.Text = "";
+            txtBloquePropietarioGestion.Text = "";
+            txtPisoPropietarioGestion.Text = "";
+            txtCodigoPostalPropietarioGestion.Text = "";
+            txtLocalidadPropietarioGestion.Text = "";
+            txtProvinciaPropietarioGestion.Text = "";
 
         }
+
+        private void habilitarCampos(bool habilitar)
+        {
+            txtNIFPropietarioGestion.IsEnabled = habilitar;
+            txtNombrePropietarioGestion.IsEnabled = habilitar;
+            txtApellidosPropietarioGestion.IsEnabled = habilitar;
+            txtEmailPropietarioGestion.IsEnabled = habilitar;
+            txtTelefonoPropietarioGestion.IsEnabled = habilitar;
+            dpickerFechaAlta.IsEnabled = habilitar;
+            txtCallePropietarioGestion.IsEnabled = habilitar;
+            txtBloquePropietarioGestion.IsEnabled = habilitar;
+            txtPisoPropietarioGestion.IsEnabled = habilitar;
+            txtCodigoPostalPropietarioGestion.IsEnabled = habilitar;
+            txtLocalidadPropietarioGestion.IsEnabled = habilitar;
+            txtProvinciaPropietarioGestion.IsEnabled = habilitar;
+
+        }
+       
 
         private void txtFiltroNombre_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -181,18 +239,12 @@ namespace DI_Proyecyo_Final
             }
         }
 
+        private void btnIrAPropiedades_Click(object sender, EventArgs e)
+        {
+
+        }
 
         private void btnInformesPropietaro_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnEditarPropietario_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnGuardarPropietario_Click(object sender, EventArgs e)
         {
 
         }
@@ -202,17 +254,100 @@ namespace DI_Proyecyo_Final
 
         }
 
+        private void btnEditarPropietario_Click(object sender, EventArgs e)
+        {
+            habilitarCampos(true);
+            opActual = OperacionActual.UpdatePropietario;
+        }
+
+        private void btnGuardarPropietario_Click(object sender, EventArgs e)
+        {
+            if (this.propietarioSeleccionado != null)
+            {
+                this.opActual = OperacionActual.UpdatePropietario;
+                txtVentanaEmergente2btn.Text = "Se va a proceder a actualizar los datos del usuario seleccinado." +
+                    "\n\n¿ Desea continuar ?";
+                miDialogHost2btn.IsOpen = true;
+            }
+        }
+
+        private void lanzarModificarUsuario()
+        {
+            bool modificadoConExito = propietarioSeleccionado.modificarPropietario();
+            if (modificadoConExito) refrescarDataGrid();  // si se modifico correctamente refresco la pestaña de gestion de usuarios
+            String mensaje = modificadoConExito ? "Propietario modificado con éxito" : "Error, no se modifico al propietario"; // mensaje segun resultado
+            lanzarSnackBar(mensaje, 2);  // lanzo el snackbar que informa al usuario.
+        }
+
+       
         private void btnBorrarPropietario_Click(object sender, EventArgs e)
         {
-
+            if (this.propietarioSeleccionado != null)
+            {
+                this.opActual = OperacionActual.DeletePropietario;
+                txtVentanaEmergente2btn.Text = "¡¡ CUIDADO !!\n\nEliminar al propietario eliminará también " +
+                    "todas sus propiedades.\n\nEsta operación no puede deshacerse."
+                   + "\n\n¿ Desea eliminar definitivamente al propietario "+this.propietarioSeleccionado.Nombre+
+                   " "+this.propietarioSeleccionado.Apellidos+" ?";                
+                miDialogHost2btn.IsOpen = true;
+            }
         }
 
-        private void btnIrAPropiedades_Click(object sender, EventArgs e)
+        private void lanzarBorrarPropietario()
         {
-
+            bool eliminadoConExito = propietarioSeleccionado.borrarPropietario();
+            
+            if (eliminadoConExito) refrescarDataGrid();  // si se modifico correctamente refresco la pestaña de gestion de usuarios
+            String mensaje = eliminadoConExito ? "Propietario eliminado con éxito" : "Error, no se eliminó al propietario"; // mensaje segun resultado
+            lanzarSnackBar(mensaje, 2);  // lanzo el snackbar que informa al usuario.
         }
 
 
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Verifica el estado de validación de todos los campos y que se este editando al propietrio
+            btnGuardarPropietario.IsEnabled = ValidarTodosLosCampos() && opActual.Equals(OperacionActual.UpdatePropietario);
+        }
+
+        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Verifica el estado de validación de todos los campos y que se este editando al propietrio
+            btnGuardarPropietario.IsEnabled = ValidarTodosLosCampos() && opActual.Equals(OperacionActual.UpdatePropietario);
+        }
+
+        private bool ValidarTodosLosCampos()
+        {            
+            return !Validation.GetHasError(txtNIFPropietarioGestion) &&
+                   !Validation.GetHasError(txtNombrePropietarioGestion) &&
+                   !Validation.GetHasError(txtApellidosPropietarioGestion) &&
+                   !Validation.GetHasError(txtEmailPropietarioGestion) &&
+                   !Validation.GetHasError(txtTelefonoPropietarioGestion) &&
+                   !Validation.GetHasError(dpickerFechaAlta) &&
+                   !Validation.GetHasError(txtCallePropietarioGestion) &&
+                   !Validation.GetHasError(txtBloquePropietarioGestion) &&
+                   !Validation.GetHasError(txtPisoPropietarioGestion) &&
+                   !Validation.GetHasError(txtCodigoPostalPropietarioGestion) &&
+                   !Validation.GetHasError(txtLocalidadPropietarioGestion) &&
+                   !Validation.GetHasError(txtProvinciaPropietarioGestion);
+           
+        }
+
+        private void agregarEventoATextBoxes()
+        {
+            
+            txtNIFPropietarioGestion.TextChanged += TextBox_TextChanged;
+            txtNombrePropietarioGestion.TextChanged += TextBox_TextChanged;
+            txtApellidosPropietarioGestion.TextChanged += TextBox_TextChanged;
+            txtEmailPropietarioGestion.TextChanged += TextBox_TextChanged;
+            txtTelefonoPropietarioGestion.TextChanged += TextBox_TextChanged;
+            dpickerFechaAlta.SelectedDateChanged += DatePicker_SelectedDateChanged;
+            txtCallePropietarioGestion.TextChanged += TextBox_TextChanged;
+            txtBloquePropietarioGestion.TextChanged += TextBox_TextChanged;
+            txtPisoPropietarioGestion.TextChanged += TextBox_TextChanged;
+            txtCodigoPostalPropietarioGestion.TextChanged += TextBox_TextChanged;
+            txtLocalidadPropietarioGestion.TextChanged += TextBox_TextChanged;
+            txtProvinciaPropietarioGestion.TextChanged += TextBox_TextChanged;
+        }
 
 
         /*==============================================================================================================================*/
@@ -241,7 +376,26 @@ namespace DI_Proyecyo_Final
         /// <param name="e"></param>
         private void btnAceptar_onClick(object sender, RoutedEventArgs e)
         {
-            
+            if (opActual.Equals(OperacionActual.DeletePropietario))
+            {
+                lanzarBorrarPropietario();
+            }else if (opActual.Equals(OperacionActual.UpdatePropietario))
+            {
+                lanzarModificarUsuario();
+            }
+
+
+            opActual = OperacionActual.None;
+        }
+
+        /// <summary>
+        /// Método que lanza la snackBar con el mensaje y durante los segundos facilitados
+        /// </summary>
+        /// <param name="mensaje"></param>
+        /// <param name="segundos"></param>
+        private void lanzarSnackBar(String mensaje, int segundos)
+        {
+            SnackbarUsuarios.MessageQueue?.Enqueue(mensaje, null, null, null, false, true, TimeSpan.FromSeconds(segundos));
         }
 
         /// <summary>

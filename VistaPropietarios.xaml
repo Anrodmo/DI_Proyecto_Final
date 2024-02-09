@@ -24,6 +24,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.PopupBox.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Snackbar.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.DatePicker.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ProgressBar.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Style x:Key="estiloBotonesMenu" TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
                 <Setter Property="Margin" Value="16,4,16,4"/>
@@ -65,18 +66,15 @@
                 <StackPanel Margin="20">
                     <TextBlock  x:Name="txtVentanaEmergente1btn" TextAlignment="Center"  Margin="25,20,25,10" FontSize="15"/>
                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                        <Button
-             Margin="0,8,8,0"
-             Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
-             Content="ACEPTAR"
-             IsDefault="True"
-             Style="{StaticResource MaterialDesignFlatButton}">
+                        <Button Margin="0,8,8,0" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" Content="ACEPTAR"
+                            IsDefault="True" Style="{StaticResource MaterialDesignFlatButton}">
                         </Button>
                     </StackPanel>
                 </StackPanel>
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
 
+        <ProgressBar x:Name="progresoCircular" Style="{StaticResource MaterialDesignCircularProgressBar}"  Visibility="Collapsed" />
 
         <materialDesign:Card  Margin="10,20,10,10" materialDesign:ElevationAssist.Elevation="Dp8" Grid.Row="0">
             <TabControl  materialDesign:ColorZoneAssist.Mode="PrimaryMid" Style="{StaticResource MaterialDesignFilledTabControl}"
@@ -112,8 +110,8 @@
                         </DataGrid>
 
                         <Button  Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryLightButton}" ToolTip="MaterialDesignFloatingActionMiniSecondaryLightButton" Grid.Column="0" 
-                        VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,-5,0" Panel.ZIndex="1" materialDesign:ElevationAssist.Elevation="Dp12"
-                         x:Name="btnActualizarPropietarios" Click="btnActualzarPropietarios_onClick">
+                            VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,-5,0" Panel.ZIndex="1" materialDesign:ElevationAssist.Elevation="Dp12"
+                            x:Name="btnActualizarPropietarios" Click="btnActualzarPropietarios_onClick">
                             <materialDesign:PackIcon  Width="25" Height="25" Kind="CloudRefreshOutline" />
                         </Button>
 
@@ -160,13 +158,13 @@
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <materialDesign:PackIcon Grid.Column="0" Foreground="{Binding ElementName=txtNombreUsuarioGestion, Path=BorderBrush}" Kind="Account" VerticalAlignment="Center"  
+                                        <materialDesign:PackIcon Grid.Column="0" Foreground="{Binding ElementName=txtNIFPropietarioGestion, Path=BorderBrush}" Kind="Account" VerticalAlignment="Center"  
                                             Width="25" Height="25" Margin="0,15,0,0"/>
 
                                         <TextBox x:Name="txtNIFPropietarioGestion"  Grid.Column="1" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" 
                                             materialDesign:HintAssist.Hint="NIF/CIF" MaxLength="10" Margin="20,0,0,0" materialDesign:TextFieldAssist.HasClearButton="True" IsEnabled="False" >
                                             <TextBox.Text>
-                                                <Binding Path="CambioEnTexto.NifPopietarioGestion" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding Path="CambioEnTexto.NifPropietarioGestion" UpdateSourceTrigger="PropertyChanged">
                                                     <Binding.ValidationRules>
                                                         <viewModel:ReglaValidacionObligatorio />
                                                     </Binding.ValidationRules>
@@ -207,12 +205,18 @@
                                             <ColumnDefinition Width="auto"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <materialDesign:PackIcon Grid.Column="0" Foreground="{Binding ElementName=cmbRolGestion, Path=BorderBrush}" Kind="AccountQuestion" VerticalAlignment="Center"  
+                                        <materialDesign:PackIcon Grid.Column="0" Foreground="{Binding ElementName=txtEmailPropietarioGestion, Path=BorderBrush}" Kind="CardAccountPhoneOutline" VerticalAlignment="Center"  
                                             Width="25" Height="25" Margin="0,5,0,0"/>
 
                                         <DatePicker x:Name="dpickerFechaAlta" Grid.Column="3" Margin="20,0,0,0"  materialDesign:HintAssist.Hint="Fecha de alta" materialDesign:TextFieldAssist.HasClearButton="True"
                                               Style="{StaticResource MaterialDesignFloatingHintDatePicker}" IsEnabled="False" materialDesign:CalendarAssist.IsHeaderVisible="true" Width="auto">
-                                            
+                                            <DatePicker.SelectedDate>
+                                                <Binding Path="FechaCorrecta.FechaValidaPropietariosGestion" UpdateSourceTrigger="PropertyChanged">
+                                                    <Binding.ValidationRules>
+                                                        <viewModel:ReglaValidacionFechaObligatoria />
+                                                    </Binding.ValidationRules>
+                                                </Binding>
+                                            </DatePicker.SelectedDate>
                                         </DatePicker>
 
                                         <TextBox x:Name="txtEmailPropietarioGestion"  Grid.Column="1" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" 
@@ -245,7 +249,7 @@
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <materialDesign:PackIcon Grid.Column="0" Foreground="{Binding ElementName=txtContraseñaGestion1, Path=BorderBrush}" Kind="Key" VerticalAlignment="Center"  
+                                        <materialDesign:PackIcon Grid.Column="0" Foreground="{Binding ElementName=txtCallePropietarioGestion, Path=BorderBrush}" Kind="HomeOutline" VerticalAlignment="Center"  
                                             Width="25" Height="25" Margin="0,15,0,0"/>
                                         <TextBox x:Name="txtCallePropietarioGestion"  Grid.Column="3" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" 
                                             materialDesign:HintAssist.Hint="Calle" MaxLength="120" Margin="20,0,0,0" materialDesign:TextFieldAssist.HasClearButton="True" IsEnabled="False" >
@@ -267,7 +271,7 @@
                                             <ColumnDefinition Width="auto"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <materialDesign:PackIcon Grid.Column="0" Foreground="{Binding ElementName=txtContraseñaGestion1, Path=BorderBrush}" Kind="Key" VerticalAlignment="Center"  
+                                        <materialDesign:PackIcon Grid.Column="0" Foreground="{Binding ElementName=txtBloquePropietarioGestion, Path=BorderBrush}" Kind="HomeSearchOutline" VerticalAlignment="Center"  
                                             Width="25" Height="25" Margin="0,15,0,0"/>
                                         <TextBox x:Name="txtBloquePropietarioGestion"  Grid.Column="1" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" 
                                             materialDesign:HintAssist.Hint="Bloque" MaxLength="10" Margin="20,0,0,0" materialDesign:TextFieldAssist.HasClearButton="True" IsEnabled="False" >
@@ -308,7 +312,7 @@
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <materialDesign:PackIcon Grid.Column="0" Foreground="{Binding ElementName=txtContraseñaGestion1, Path=BorderBrush}" Kind="Key" VerticalAlignment="Center"  
+                                        <materialDesign:PackIcon Grid.Column="0" Foreground="{Binding ElementName=txtLocalidadPropietarioGestion, Path=BorderBrush}" Kind="HomeCityOutline" VerticalAlignment="Center"  
                                             Width="25" Height="25" Margin="0,15,0,0"/>
                                         <TextBox x:Name="txtLocalidadPropietarioGestion"  Grid.Column="1" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" 
                                             materialDesign:HintAssist.Hint="Localidad" MaxLength="60" Margin="20,0,0,0" materialDesign:TextFieldAssist.HasClearButton="True" IsEnabled="False" >

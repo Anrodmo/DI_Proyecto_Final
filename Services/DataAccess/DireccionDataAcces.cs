@@ -103,7 +103,7 @@ namespace DI_Proyecyo_Final.Services.DataAccess
             return direccion;
         }
 
-        public static bool modificarDireccion(int id, Direccion nuevaDireccion)
+        public static bool modificarDireccion(Direccion nuevaDireccion)
         {
             bool exito = false;
             string query = "UPDATE direcciones " +
@@ -118,7 +118,7 @@ namespace DI_Proyecyo_Final.Services.DataAccess
 
                     using (MySqlCommand comandoModificar = new MySqlCommand(query, connection))
                     {
-                        comandoModificar.Parameters.AddWithValue("@id", id);
+                        comandoModificar.Parameters.AddWithValue("@id", nuevaDireccion.Id);
                         comandoModificar.Parameters.AddWithValue("@calle", nuevaDireccion.Calle);
                         comandoModificar.Parameters.AddWithValue("@bloque", nuevaDireccion.Bloque);
                         comandoModificar.Parameters.AddWithValue("@piso", nuevaDireccion.Piso);

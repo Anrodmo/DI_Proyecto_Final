@@ -62,7 +62,7 @@ namespace DI_Proyecyo_Final.Services.DataAccess
         public static List<Propietario> ObtenerTodosLosPropietarios()
         {
             List<Propietario> listaPropietarios = new List<Propietario>();
-            string query = "SELECT id, nombre, apellidos, nif, fecha_alta, email, telefono FROM propietarios;";
+            string query = "SELECT id, nombre, apellidos, nif, fecha_alta, email, telefono, direccion FROM propietarios;";
 
             try
             {
@@ -83,7 +83,8 @@ namespace DI_Proyecyo_Final.Services.DataAccess
                             propietario.NIF = resConsulta.GetString(3);
                             propietario.Fecha_alta = resConsulta.GetDateTime(4);
                             propietario.Email = resConsulta.GetString(5);
-                            propietario.Telefono = resConsulta.GetInt32(6);                         
+                            propietario.Telefono = resConsulta.GetInt32(6);
+                            propietario.Id= resConsulta.GetInt32(7);
                             propietario.Direccion = DireccionDataAcces.getDireccion(propietario.Id);
                             listaPropietarios.Add(propietario);
                         }
@@ -101,7 +102,7 @@ namespace DI_Proyecyo_Final.Services.DataAccess
         }
 
 
-        public static bool modificarPropietario(int id, Propietario nuevoPropietario)
+        public static bool modificarPropietario(Propietario nuevoPropietario)
         {
             bool exito = false;
             string query = "UPDATE propietarios " +
@@ -115,7 +116,7 @@ namespace DI_Proyecyo_Final.Services.DataAccess
                     connection.Open();
                     using (MySqlCommand comandoModificar = new MySqlCommand(query, connection))
                     {
-                        comandoModificar.Parameters.AddWithValue("@id", id);
+                        comandoModificar.Parameters.AddWithValue("@id", nuevoPropietario.Id);
                         comandoModificar.Parameters.AddWithValue("@nombre", nuevoPropietario.Nombre);
                         comandoModificar.Parameters.AddWithValue("@apellidos", nuevoPropietario.Apellidos);
                         comandoModificar.Parameters.AddWithValue("@nif", nuevoPropietario.NIF);
@@ -127,7 +128,7 @@ namespace DI_Proyecyo_Final.Services.DataAccess
 
                         if (filasAfectadas > 0)  // si modifico el usuario tambien modifico su direccion
                         {                           
-                            bool modificacionDireccionExitosa = DireccionDataAcces.modificarDireccion(nuevoPropietario.Direccion.Id, nuevoPropietario.Direccion);
+                            bool modificacionDireccionExitosa = DireccionDataAcces.modificarDireccion(nuevoPropietario.Direccion);
                             if (modificacionDireccionExitosa)
                             {
                                 exito = true;
@@ -145,5 +146,9 @@ namespace DI_Proyecyo_Final.Services.DataAccess
         }
 
 
+        internal static bool eliminarPropietario(Propietario propietario)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

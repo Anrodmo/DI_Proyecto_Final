@@ -84,6 +84,18 @@ namespace DI_Proyecyo_Final.Model
         {
             return PropietarioDataAccess.ObtenerTodosLosPropietarios();
         }
+
+
+        internal bool borrarPropietario()
+        {
+            return PropietarioDataAccess.eliminarPropietario(this);
+        }
+
+        internal bool modificarPropietario()
+        {
+            return PropietarioDataAccess.modificarPropietario(this);
+        }
+
     }
 
 

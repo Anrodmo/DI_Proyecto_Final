@@ -13,7 +13,7 @@ namespace DI_Proyecyo_Final.ViewModel
     internal class ContenedorDataContext
     {
         public NotificacionCambioEnTextBoxes CambioEnTexto { get; set; }
-        //public NotificacionFechaCorrecta FechaCorrecta { get; set; }
+        public NotificacionFechaCorrecta FechaCorrecta { get; set; }
         public NotificadorToggleButtons notificadorToggleButtons { get; set; }
     }
 }

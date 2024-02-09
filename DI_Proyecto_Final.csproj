@@ -152,6 +152,8 @@
     <Compile Include="ViewModel\ComparadorSecureString.cs" />
     <Compile Include="ViewModel\MensajeroLogIn.cs" />
     <Compile Include="ViewModel\MensajeroLogOut.cs" />
+    <Compile Include="ViewModel\NotificacionFechaCorrecta.cs" />
+    <Compile Include="ViewModel\ReglaValidacionFechaObligatoria.cs" />
     <Compile Include="ViewModel\ReglaValidaciónContraseña.cs" />
     <Compile Include="ViewModel\TercioConverter.cs" />
     <Compile Include="ViewModel\ViewModelSesion.cs" />

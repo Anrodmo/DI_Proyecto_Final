@@ -59,7 +59,7 @@ namespace DI_Proyecyo_Final
             // lo suscribo al evento para controlar si se modifica tras haber validado el nombre de listaUsuarios con la BBDD
             txtNombreUsuario.TextChanged += TxtNombreUsuario_TextChanged;
 
-            // lo mimso pero en la vista de lsitar,modificar
+            // lo mimso pero en la vista de listar,modificar
             txtNombreUsuarioGestion.TextChanged += TxtNombreUsuarioGestion_TextChanged;
 
             dataGridUsuarios.Items.Clear();
@@ -73,9 +73,10 @@ namespace DI_Proyecyo_Final
             {
                 dataGridUsuarios.ItemsSource = listaUsuarios;
             }
+
         }
 
-        
+
 
 
         /*==============================================================================================================================*/
@@ -416,8 +417,7 @@ namespace DI_Proyecyo_Final
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnValidarNombreUsusario_Click(object sender, EventArgs e)
-        {
-           
+        {         
             BindingExpression bindingExpression = txtNombreUsuarioGestion.GetBindingExpression(TextBox.TextProperty);
             if (bindingExpression != null && !bindingExpression.HasValidationError)
             {
