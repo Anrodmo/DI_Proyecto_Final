@@ -13,11 +13,13 @@ namespace DI_Proyecyo_Final.ViewModel
     internal class NotificacionFechaCorrecta : INotifyPropertyChanged
     {
         private DateTime? fechaValidaPropietariosGestion;
+        private DateTime? fechaValidaPropietariosCreacion;
 
         public NotificacionFechaCorrecta()
         {
             // Inicializar la fecha seleccionada como null
             fechaValidaPropietariosGestion = null;
+            fechaValidaPropietariosCreacion = null;
         }
 
         public DateTime? FechaValidaPropietariosGestion
@@ -33,8 +35,24 @@ namespace DI_Proyecyo_Final.ViewModel
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public DateTime? FechaValidaPropietariosCreacion
+        {
+            get { return fechaValidaPropietariosCreacion; }
+            set
+            {
+                if (fechaValidaPropietariosCreacion != value)
+                {
+                    fechaValidaPropietariosCreacion = value;
+                    OnPropertyChanged(nameof(FechaValidaPropietariosCreacion));
+                }
+            }
+        }
 
+
+
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

@@ -153,8 +153,10 @@
     <Compile Include="ViewModel\MensajeroLogIn.cs" />
     <Compile Include="ViewModel\MensajeroLogOut.cs" />
     <Compile Include="ViewModel\NotificacionFechaCorrecta.cs" />
+    <Compile Include="ViewModel\ReglaValidacionEmail.cs" />
     <Compile Include="ViewModel\ReglaValidacionFechaObligatoria.cs" />
     <Compile Include="ViewModel\ReglaValidaciónContraseña.cs" />
+    <Compile Include="ViewModel\ReglaValidacionEnteros.cs" />
     <Compile Include="ViewModel\TercioConverter.cs" />
     <Compile Include="ViewModel\ViewModelSesion.cs" />
     <Compile Include="VistaLogin.xaml.cs">

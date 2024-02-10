@@ -23,7 +23,7 @@ namespace DI_Proyecyo_Final.Services.DataAccess
         /// <returns> int Id de la dirección creada si la operacion ha tenido éxito. 0 en caso contrario.
         public static int crearDireccion(Direccion direccion)
         {
-            int ultimaID = 0;
+            int ultimaID = -1;
             string query = "INSERT INTO direcciones (calle, bloque, piso, localidad, provincia, cod_postal, uid) " +
                 "VALUES (@calle, @bloque, @piso, @localidad, @provincia, @cod_postal, @uid)";
             try
@@ -54,7 +54,7 @@ namespace DI_Proyecyo_Final.Services.DataAccess
                 MessageBox.Show("Error de conexión con la BBDD", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
              
-            return ultimaID = 0;
+            return ultimaID;
         }
 
         /// <summary>

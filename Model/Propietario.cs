@@ -16,7 +16,7 @@ namespace DI_Proyecyo_Final.Model
         private string nif;
         private DateTime fecha_alta;
         private string email;
-        private int telefono;
+        private long telefono;
         Direccion direccion;
 
         public Propietario() { }
@@ -76,7 +76,7 @@ namespace DI_Proyecyo_Final.Model
             }
         }
 
-        public int Telefono { get => telefono; set => telefono = value; }
+        public long Telefono { get => telefono; set => telefono = value; }
         public int Id { get => id; set => id = value; }
         internal Direccion Direccion { get => direccion; set => direccion = value; }
 

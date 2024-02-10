@@ -3,6 +3,7 @@ using DI_Proyecyo_Final.ViewModel;
 using Google.Protobuf.WellKnownTypes;
 using MahApps.Metro.Controls.Dialogs;
 using MaterialDesignThemes.Wpf;
+using Org.BouncyCastle.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,6 +48,7 @@ namespace DI_Proyecyo_Final
 
             agregarEventoATextBoxes(); // agrego  todos los textboxes a un evento comun para que cuando ninguno tenga error
                                        // se habilite el boton de modificar
+            agregarEventoATextBoxesCreacion();  // lo mismo para el boton de crear propietario
 
             dataGridPropietarios.Items.Clear();
             listaPropietarios = Propietario.obtenerListaPropietarios();
@@ -93,7 +95,7 @@ namespace DI_Proyecyo_Final
 
                 btnAñadirPropiedad.IsEnabled = true;
                 btnEditarPropietario.IsEnabled = true;
-                btnActualizarPropietarios.IsEnabled = false;
+                btnGuardarPropietario.IsEnabled = false;
                 btnBorrarPropietario.IsEnabled = true;
                 // deshabilitamos entradas de datos
 
@@ -170,6 +172,7 @@ namespace DI_Proyecyo_Final
             txtLocalidadPropietarioGestion.Text = propietario.Direccion.Localidad;
             txtProvinciaPropietarioGestion.Text = propietario.Direccion.Provincia;
         }
+
         private void vaciarCampos()
         {
             txtNIFPropietarioGestion.Text = "";
@@ -185,6 +188,24 @@ namespace DI_Proyecyo_Final
             txtLocalidadPropietarioGestion.Text = "";
             txtProvinciaPropietarioGestion.Text = "";
 
+            txtFiltroNIF.Text = "";
+            txtFiltroNombre.Text = "";
+        }
+
+        private void cargarCamposEnPropietrioSeleccionado()
+        {
+            this.propietarioSeleccionado.NIF = txtNIFPropietarioGestion.Text.Trim();
+            this.propietarioSeleccionado.Nombre = txtNombrePropietarioGestion.Text.Trim();
+            this.propietarioSeleccionado.Apellidos = txtApellidosPropietarioGestion.Text.Trim();
+            this.propietarioSeleccionado.Email= txtEmailPropietarioGestion.Text.Trim();
+            this.propietarioSeleccionado.Telefono = int.Parse(txtTelefonoPropietarioGestion.Text.Trim());
+            this.propietarioSeleccionado.Fecha_alta = (DateTime)dpickerFechaAlta.SelectedDate;
+            this.propietarioSeleccionado.Direccion.Calle = txtCallePropietarioGestion.Text;
+            this.propietarioSeleccionado.Direccion.Bloque = txtBloquePropietarioGestion.Text;
+            this.propietarioSeleccionado.Direccion.Piso = txtPisoPropietarioGestion.Text;
+            this.propietarioSeleccionado.Direccion.CodPostal = txtCodigoPostalPropietarioGestion.Text;
+            this.propietarioSeleccionado.Direccion.Localidad = txtLocalidadPropietarioGestion.Text;
+            this.propietarioSeleccionado.Direccion.Provincia = txtProvinciaPropietarioGestion.Text;
         }
 
         private void habilitarCampos(bool habilitar)
@@ -209,13 +230,14 @@ namespace DI_Proyecyo_Final
         {
             if (viewPropietarios != null)
             {
-                // Aplica el filtro al nombre de usuario
+                txtFiltroNIF.Text = "";
+                // Aplica el filtro al nombre de propietario
                 viewPropietarios.Filter = item =>
                 {
                     if (item is Propietario propietario)
                     {
                         // Comparación sin distinción entre mayúsculas y minúsculas
-                        //return propietario.Nombre.IndexOf(txtFiltroNombre.Text, StringComparison.OrdinalIgnoreCase) != -1;
+                        return propietario.Nombre.IndexOf(txtFiltroNombre.Text, StringComparison.OrdinalIgnoreCase) != -1;
                     }
                     return false;
                 };
@@ -226,13 +248,14 @@ namespace DI_Proyecyo_Final
         {
             if (viewPropietarios != null)
             {
-                // Aplica el filtro al nombre de usuario
+                txtFiltroNombre.Text = "";
+                // Aplica el filtro al NIf del propietario
                 viewPropietarios.Filter = item =>
                 {
                     if (item is Propietario propietario)
                     {
                         // Comparación sin distinción entre mayúsculas y minúsculas
-                        //return propietario.NIF.IndexOf(txtFiltroNIF.Text, StringComparison.OrdinalIgnoreCase) != -1;
+                        return propietario.NIF.IndexOf(txtFiltroNIF.Text, StringComparison.OrdinalIgnoreCase) != -1;
                     }
                     return false;
                 };
@@ -273,6 +296,7 @@ namespace DI_Proyecyo_Final
 
         private void lanzarModificarUsuario()
         {
+            cargarCamposEnPropietrioSeleccionado(); // leo los txt y los pongo en el usuario
             bool modificadoConExito = propietarioSeleccionado.modificarPropietario();
             if (modificadoConExito) refrescarDataGrid();  // si se modifico correctamente refresco la pestaña de gestion de usuarios
             String mensaje = modificadoConExito ? "Propietario modificado con éxito" : "Error, no se modifico al propietario"; // mensaje segun resultado
@@ -334,7 +358,7 @@ namespace DI_Proyecyo_Final
 
         private void agregarEventoATextBoxes()
         {
-            
+            // eventos para controlar que este todo cumplimentado para modificar
             txtNIFPropietarioGestion.TextChanged += TextBox_TextChanged;
             txtNombrePropietarioGestion.TextChanged += TextBox_TextChanged;
             txtApellidosPropietarioGestion.TextChanged += TextBox_TextChanged;
@@ -347,6 +371,9 @@ namespace DI_Proyecyo_Final
             txtCodigoPostalPropietarioGestion.TextChanged += TextBox_TextChanged;
             txtLocalidadPropietarioGestion.TextChanged += TextBox_TextChanged;
             txtProvinciaPropietarioGestion.TextChanged += TextBox_TextChanged;
+            // eventos para recibir los cambios de texto para filtrar el datagrid
+            txtFiltroNIF.TextChanged += txtFiltroNIF_TextChanged;
+            txtFiltroNombre.TextChanged += txtFiltroNombre_TextChanged;
         }
 
 
@@ -354,11 +381,101 @@ namespace DI_Proyecyo_Final
         /*                                            GESTIÓN DE CREAR PROPIETARIOS                                                     */
         /*==============================================================================================================================*/
 
+        private void btnBorrarCamposPropietario_Click(object sender, EventArgs e)
+        {
+            txtNIFPropietarioCreacion.Text = "";
+            txtApellidosPropietarioCreacion.Text = "";
+            txtNombrePropietarioCreacion.Text = "";
+            txtEmailPropietarioCreacion.Text = "";
+            txtTelefonoPropietarioCreacion.Text = "";
+            txtCallePropietarioCreacion.Text = "";
+            txtBloquePropietarioCreacion.Text = "";
+            txtPisoPropietarioCreacion.Text = "";
+            txtCodigoPostalPropietarioCreacion.Text = "";
+            txtLocalidadPropietarioCreacion.Text = "";
+            txtProvinciaPropietarioCreacion.Text = "";          
+            dpickerFechaAltaCreacion.SelectedDate = DateTime.Now;
+        }
 
 
 
+        private void btnCrearPropietario_Click(object sender, EventArgs e)
+        {
 
+        }
 
+        private void lanzarCrearPropietario()
+        {
+
+        }
+
+        private Propietario obtenerPropietarioDeFormulario()
+        {
+            Propietario propietario = new Propietario();
+            propietario.Nombre = txtNombrePropietarioCreacion.Text.Trim();
+            propietario.NIF = txtNIFPropietarioCreacion.Text.Trim();
+            propietario.Apellidos = txtApellidosPropietarioCreacion.Text.Trim();
+            propietario.Email = txtEmailPropietarioCreacion.Text.Trim();
+            propietario.Fecha_alta = (DateTime)dpickerFechaAltaCreacion.SelectedDate;            
+            propietario.Telefono = long.TryParse(txtTelefonoPropietarioCreacion.Text.Trim(), out long telefono) ? telefono : 0;
+
+            propietario.Direccion = new Direccion();
+            propietario.Direccion.Calle = txtCallePropietarioCreacion.Text.Trim();
+            propietario.Direccion.Bloque = txtBloquePropietarioCreacion.Text.Trim();
+            propietario.Direccion.Piso = txtPisoPropietarioCreacion.Text.Trim();
+            propietario.Direccion.CodPostal = txtCodigoPostalPropietarioCreacion.Text.Trim();
+            propietario.Direccion.Localidad = txtLocalidadPropietarioCreacion.Text.Trim();
+            propietario.Direccion.Provincia = txtProvinciaPropietarioCreacion.Text.Trim();
+
+            return propietario;
+        }
+
+        private void TextBox_TextCrearChanged(object sender, TextChangedEventArgs e)
+        {
+            // Verifica el estado de validación de todos los campos y que se este editando al propietrio
+            btnCrearPropietario.IsEnabled = ValidarTodosLosCamposCrear();
+        }
+
+        private void DatePickerCrear_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Verifica el estado de validación de todos los campos y que se este editando al propietrio
+            btnCrearPropietario.IsEnabled = ValidarTodosLosCamposCrear();
+        }
+
+        private bool ValidarTodosLosCamposCrear()
+        {
+            return !Validation.GetHasError(txtNIFPropietarioCreacion) &&
+                   !Validation.GetHasError(txtNombrePropietarioCreacion) &&
+                   !Validation.GetHasError(txtApellidosPropietarioCreacion) &&
+                   !Validation.GetHasError(txtEmailPropietarioCreacion) &&
+                   !Validation.GetHasError(txtTelefonoPropietarioCreacion) &&
+                   !Validation.GetHasError(dpickerFechaAltaCreacion) &&
+                   !Validation.GetHasError(txtCallePropietarioCreacion) &&
+                   !Validation.GetHasError(txtBloquePropietarioCreacion) &&
+                   !Validation.GetHasError(txtPisoPropietarioCreacion) &&
+                   !Validation.GetHasError(txtCodigoPostalPropietarioCreacion) &&
+                   !Validation.GetHasError(txtLocalidadPropietarioCreacion) &&
+                   !Validation.GetHasError(txtProvinciaPropietarioCreacion);
+
+        }
+
+        private void agregarEventoATextBoxesCreacion()
+        {
+            // eventos para controlar que este todo cumplimentado para modificar
+            txtNIFPropietarioCreacion.TextChanged += TextBox_TextCrearChanged;
+            txtNombrePropietarioCreacion.TextChanged += TextBox_TextCrearChanged;
+            txtApellidosPropietarioCreacion.TextChanged += TextBox_TextCrearChanged;
+            txtEmailPropietarioCreacion.TextChanged += TextBox_TextCrearChanged;
+            txtTelefonoPropietarioCreacion.TextChanged += TextBox_TextCrearChanged;
+            dpickerFechaAltaCreacion.SelectedDateChanged += DatePickerCrear_SelectedDateChanged;
+            txtCallePropietarioCreacion.TextChanged += TextBox_TextCrearChanged;
+            txtBloquePropietarioCreacion.TextChanged += TextBox_TextCrearChanged;
+            txtPisoPropietarioCreacion.TextChanged += TextBox_TextCrearChanged;
+            txtCodigoPostalPropietarioCreacion.TextChanged += TextBox_TextCrearChanged;
+            txtLocalidadPropietarioCreacion.TextChanged += TextBox_TextCrearChanged;
+            txtProvinciaPropietarioCreacion.TextChanged += TextBox_TextCrearChanged;
+            
+        }
 
         /*==============================================================================================================================*/
         /*                                                     MÉTODOS COMUNES                                                          */
@@ -410,8 +527,21 @@ namespace DI_Proyecyo_Final
                 TabItem selectedTab = e.AddedItems[0] as TabItem;
 
                 if (selectedTab == tabCrear)   // para actualziar los errores y vaciar los campos
-                {
-                    
+                {                 
+                    txtNIFPropietarioCreacion.Text = "1";
+                    txtApellidosPropietarioCreacion.Text = "1";
+                    txtNombrePropietarioCreacion.Text = "1";
+                    txtEmailPropietarioCreacion.Text= "fff@ggg.com";
+                    txtTelefonoPropietarioCreacion.Text = "1";
+                    txtCallePropietarioCreacion.Text = "1";
+                    txtBloquePropietarioCreacion.Text = "1";
+                    txtPisoPropietarioCreacion.Text = "1";
+                    txtCodigoPostalPropietarioCreacion.Text = "1";
+                    txtLocalidadPropietarioCreacion.Text = "1";
+                    txtProvinciaPropietarioCreacion.Text = "1";
+                    btnBorrarCamposPropietario_Click(null, null);
+                    dpickerFechaAltaCreacion.SelectedDate = DateTime.Now;
+
                 }
             }
         }

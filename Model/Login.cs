@@ -17,11 +17,7 @@ namespace DI_Proyecyo_Final.Model
     /// </summary>
     static internal class Login
     {
-        static private int intentos;
-
-
-
-
+        
 
         /// <summary>
         /// Método que gestiona si un login de usuario es correcto o no. gestiona la transfomacion del ScureString de la contraseña
@@ -65,15 +61,12 @@ namespace DI_Proyecyo_Final.Model
         {
             IntPtr puntero = IntPtr.Zero; // inicializo un puntero a cero
             byte[] hashBytes;
-
-           
-
             using (SHA512 sha512 = SHA512.Create())
             {   // lo hago directamente, asi no almaceno la pass en un array de bytes en plano            
                 //byte[] inputBytes = Encoding.UTF8.GetBytes(Marshal.PtrToStringUni(puntero));
                 try
                 {
-                    puntero = Marshal.SecureStringToGlobalAllocUnicode(contraseña); // le digo al puntero donde esta la secure password
+                    puntero = Marshal.SecureStringToGlobalAllocUnicode(contraseña); // le digo al puntero donde esta la secure password  en bytes planos ya
                        // creo hash de bytes       // esto me pasa la pass a bytes desde un string plano que saco del puntero para poder hashearla
                     hashBytes = sha512.ComputeHash(Encoding.UTF8.GetBytes(Marshal.PtrToStringUni(puntero)));
                 }

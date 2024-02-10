@@ -92,29 +92,53 @@
                             <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <DataGrid x:Name="dataGridPropietarios" materialDesign:DataGridAssist.CellPadding="20, 5, 10, 5" materialDesign:DataGridAssist.ColumnHeaderPadding="20, 5 ,10, 5"
-                            CanUserAddRows="False" CanUserSortColumns="True"   SelectionUnit="FullRow" SelectionMode="Extended" AutoGenerateColumns="False"
-                            IsReadOnly="True" VerticalScrollBarVisibility="Auto"   materialDesign:DataGridAssist.ApplyMaterialDesignColumnStyles="True"
-                            Style="{StaticResource MaterialDesignDataGrid}" SelectionChanged="dataGridPropietarios_Selected" Grid.Column="0" Margin="10" materialDesign:DataGridAssist.CornerRadius="8" 
-                            materialDesign:DataGridAssist.SelectedCellBorderBrush="{StaticResource SecondaryHueMidBrush}" Width="{Binding ActualWidth, ElementName=vistaPropietarios, Converter={StaticResource TercioConverter}}"  >
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="NIF"  Binding="{Binding NIF}"  Width="auto"/>
-                                <DataGridTextColumn Header="Nombre " Binding="{Binding Nombre}" Width="*"/>
-                                <DataGridTextColumn Header="Apellidos"  Binding="{Binding Apellidos}"  Width="*"/>
-                            </DataGrid.Columns>
-                            <DataGrid.ColumnHeaderStyle>
-                                <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}" >
-                                    <Setter Property="HorizontalAlignment" Value="Center"></Setter>
-                                </Style>
-                            </DataGrid.ColumnHeaderStyle>
-                        </DataGrid>
+                        <Grid Grid.Column="0" Panel.ZIndex="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
 
-                        <Button  Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryLightButton}" ToolTip="MaterialDesignFloatingActionMiniSecondaryLightButton" Grid.Column="0" 
-                            VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,-5,0" Panel.ZIndex="1" materialDesign:ElevationAssist.Elevation="Dp12"
-                            x:Name="btnActualizarPropietarios" Click="btnActualzarPropietarios_onClick">
-                            <materialDesign:PackIcon  Width="25" Height="25" Kind="CloudRefreshOutline" />
-                        </Button>
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
+                                <materialDesign:PackIcon Grid.Column="0" Foreground="{Binding ElementName=txtFiltroNIF, Path=BorderBrush}" Kind="Account"
+                                Width="25" Height="25" Margin="10,20,0,0"/>
+                                <TextBox x:Name="txtFiltroNIF"  Grid.Column="1" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" 
+                                     materialDesign:HintAssist.Hint="Filtrar por CIF"  Margin="15,0,15,0" materialDesign:TextFieldAssist.HasClearButton="True"  >
+                                </TextBox>
+                                <TextBox x:Name="txtFiltroNombre"  Grid.Column="2" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" 
+                                    materialDesign:HintAssist.Hint="Filtrar por nombre"  Margin="0,0,10,0" materialDesign:TextFieldAssist.HasClearButton="True" >
+                                </TextBox>
+                            </Grid>
+
+                            <DataGrid x:Name="dataGridPropietarios" materialDesign:DataGridAssist.CellPadding="20, 5, 10, 5" materialDesign:DataGridAssist.ColumnHeaderPadding="20, 5 ,10, 5"
+                                CanUserAddRows="False" CanUserSortColumns="True"   SelectionUnit="FullRow" SelectionMode="Extended" AutoGenerateColumns="False"  Grid.Row="1"
+                                IsReadOnly="True" VerticalScrollBarVisibility="Auto"   materialDesign:DataGridAssist.ApplyMaterialDesignColumnStyles="True"
+                                Style="{StaticResource MaterialDesignDataGrid}" SelectionChanged="dataGridPropietarios_Selected"  Margin="10" materialDesign:DataGridAssist.CornerRadius="8" 
+                                materialDesign:DataGridAssist.SelectedCellBorderBrush="{StaticResource SecondaryHueMidBrush}" Width="{Binding ActualWidth, ElementName=vistaPropietarios, Converter={StaticResource TercioConverter}}"  >
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="NIF"  Binding="{Binding NIF}"  Width="auto"/>
+                                    <DataGridTextColumn Header="Nombre " Binding="{Binding Nombre}" Width="*"/>
+                                    <DataGridTextColumn Header="Apellidos"  Binding="{Binding Apellidos}"  Width="*"/>
+                                </DataGrid.Columns>
+                                <DataGrid.ColumnHeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}" >
+                                        <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                                    </Style>
+                                </DataGrid.ColumnHeaderStyle>
+                            </DataGrid>
+
+                            <Button  Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryLightButton}" ToolTip="MaterialDesignFloatingActionMiniSecondaryLightButton" Grid.Row="1"
+                                VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,-5,0"  materialDesign:ElevationAssist.Elevation="Dp12"
+                                x:Name="btnActualizarPropietarios" Click="btnActualzarPropietarios_onClick">
+                                <materialDesign:PackIcon  Width="25" Height="25" Kind="CloudRefreshOutline" />
+                            </Button>
+
+                        </Grid>
                         <!--   centro   -->
 
                         <materialDesign:Card Grid.Column="1" Margin="0,10,0,10" materialDesign:ElevationAssist.Elevation="Dp2">
@@ -224,7 +248,7 @@
                                             <TextBox.Text>
                                                 <Binding Path="CambioEnTexto.EmailPropietarioGestion" UpdateSourceTrigger="PropertyChanged">
                                                     <Binding.ValidationRules>
-                                                        <viewModel:ReglaValidacionObligatorio />
+                                                        <viewModel:ReglaValidacionEmail />
                                                     </Binding.ValidationRules>
                                                 </Binding>
                                             </TextBox.Text>
@@ -234,7 +258,7 @@
                                             <TextBox.Text>
                                                 <Binding Path="CambioEnTexto.TelefonoPropietarioGestion" UpdateSourceTrigger="PropertyChanged">
                                                     <Binding.ValidationRules>
-                                                        <viewModel:ReglaValidacionObligatorio />
+                                                        <viewModel:ReglaValidacionEnteros />
                                                     </Binding.ValidationRules>
                                                 </Binding>
                                             </TextBox.Text>
@@ -298,7 +322,7 @@
                                             <TextBox.Text>
                                                 <Binding Path="CambioEnTexto.CodigoPostalPropietarioGestion" UpdateSourceTrigger="PropertyChanged">
                                                     <Binding.ValidationRules>
-                                                        <viewModel:ReglaValidacionObligatorio />
+                                                        <viewModel:ReglaValidacionEnteros />
                                                     </Binding.ValidationRules>
                                                 </Binding>
                                             </TextBox.Text>
@@ -391,20 +415,20 @@
                 <!--                                                 TAB CREAR                                                                          -->
                 <!-- ================================================================================================================================== -->
 
-                <TabItem  Header="Creación de usuarios" x:Name="tabCrear" >
+                <TabItem  Header="Creación de propietarios" x:Name="tabCrear" >
 
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto" />
+                           
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
 
-                        <!--<Rectangle Grid.Column="0"  >
-                    </Rectangle>-->
 
-                        <Grid  Grid.Column="1">
+
+                        <Grid  Grid.Column="0" Margin="0,10,0,10">
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
@@ -416,20 +440,220 @@
                             </Grid.ColumnDefinitions>
 
 
-                            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="40,0,40,0" Grid.Column="1" Grid.ColumnSpan="5">
+                            
+                            <Grid  Grid.Column="1" Grid.ColumnSpan="6" >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
 
-                                
-                            </StackPanel>
+                                <Grid Grid.Row="0">
+                                    <Label  Content="Datos del propietario:"  FontSize="20" Margin="0,10,0,0"  ></Label>
+                                </Grid>
+
+                                <Grid Margin="0" Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <materialDesign:PackIcon Grid.Column="0" Foreground="{Binding ElementName=btnBorrarCamposPropitario, Path=BorderBrush}" Kind="Account" VerticalAlignment="Center"  
+                                        Width="25" Height="25" Margin="0,15,0,0"/>
+
+                                    <TextBox x:Name="txtNIFPropietarioCreacion"  Grid.Column="1" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" 
+                                        materialDesign:HintAssist.Hint="NIF/CIF" MaxLength="10" Margin="20,0,0,0" materialDesign:TextFieldAssist.HasClearButton="True"  >
+                                        <TextBox.Text>
+                                            <Binding Path="CambioEnTexto.NifPropietarioCreacion" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <viewModel:ReglaValidacionObligatorio ValidatesOnTargetUpdated="True" />
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
+
+                                    <TextBox x:Name="txtNombrePropietarioCreacion"  Grid.Column="2" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" 
+                                        materialDesign:HintAssist.Hint="Nombre" MaxLength="60" Margin="20,0,0,0" materialDesign:TextFieldAssist.HasClearButton="True"  >
+                                        <TextBox.Text>
+                                            <Binding Path="CambioEnTexto.NombrePropietarioCreacion" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <viewModel:ReglaValidacionObligatorio ValidatesOnTargetUpdated="True"/>
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
+
+                                    <TextBox x:Name="txtApellidosPropietarioCreacion"  Grid.Column="3" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" 
+                                        materialDesign:HintAssist.Hint="Apellidos" MaxLength="60" Margin="20,0,0,0" materialDesign:TextFieldAssist.HasClearButton="True"  >
+                                        <TextBox.Text>
+                                            <Binding Path="CambioEnTexto.ApellidosPropietarioCreacion" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <viewModel:ReglaValidacionObligatorio ValidatesOnTargetUpdated="True"/>
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
+
+
+                                </Grid>
+
+                                <Grid Margin="0" Grid.Row="2" >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <materialDesign:PackIcon Grid.Column="0" Foreground="{Binding ElementName=btnBorrarCamposPropitario, Path=BorderBrush}" Kind="CardAccountPhoneOutline" VerticalAlignment="Center"  
+                                        Width="25" Height="25" Margin="0,5,0,0"/>
+
+                                    <DatePicker x:Name="dpickerFechaAltaCreacion" Grid.Column="3" Margin="20,0,0,0"  materialDesign:HintAssist.Hint="Fecha de alta" materialDesign:TextFieldAssist.HasClearButton="True"
+                                        Style="{StaticResource MaterialDesignFloatingHintDatePicker}"  materialDesign:CalendarAssist.IsHeaderVisible="true" Width="auto">
+                                        <DatePicker.SelectedDate>
+                                            <Binding Path="FechaCorrecta.FechaValidaPropietariosCreacion" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <viewModel:ReglaValidacionFechaObligatoria ValidatesOnTargetUpdated="True"/>
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </DatePicker.SelectedDate>
+                                    </DatePicker>
+
+                                    <TextBox x:Name="txtEmailPropietarioCreacion"  Grid.Column="1" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" 
+                                        materialDesign:HintAssist.Hint="Email" MaxLength="100" Margin="20,0,0,0" materialDesign:TextFieldAssist.HasClearButton="True"  >
+                                        <TextBox.Text>
+                                            <Binding Path="CambioEnTexto.EmailPropietarioCreacion" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <viewModel:ReglaValidacionEmail ValidatesOnTargetUpdated="True"/>
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
+                                    <TextBox x:Name="txtTelefonoPropietarioCreacion"  Grid.Column="2" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" 
+                                            materialDesign:HintAssist.Hint="Telefono" MaxLength="12" Margin="20,0,0,0" materialDesign:TextFieldAssist.HasClearButton="True"  >
+                                        <TextBox.Text>
+                                            <Binding Path="CambioEnTexto.TelefonoPropietarioCreacion" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <viewModel:ReglaValidacionEnteros ValidatesOnTargetUpdated="True"/>
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
+                                </Grid>
+
+                                <Separator Grid.Row="3" Margin="0,20,0,0"/>
+
+                                <Grid Margin="0" Grid.Row="4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <materialDesign:PackIcon Grid.Column="0" Foreground="{Binding ElementName=btnBorrarCamposPropitario, Path=BorderBrush}" Kind="HomeOutline" VerticalAlignment="Center"  
+                                        Width="25" Height="25" Margin="0,15,0,0"/>
+                                    <TextBox x:Name="txtCallePropietarioCreacion"  Grid.Column="3" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" 
+                                        materialDesign:HintAssist.Hint="Calle" MaxLength="120" Margin="20,0,0,0" materialDesign:TextFieldAssist.HasClearButton="True"  >
+                                        <TextBox.Text>
+                                            <Binding Path="CambioEnTexto.CallePropietarioCreacion" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <viewModel:ReglaValidacionObligatorio ValidatesOnTargetUpdated="True"/>
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
+                                </Grid>
+
+                                <Grid Margin="0" Grid.Row="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <materialDesign:PackIcon Grid.Column="0" Foreground="{Binding ElementName=btnBorrarCamposPropitario, Path=BorderBrush}" Kind="HomeSearchOutline" VerticalAlignment="Center"  
+                                        Width="25" Height="25" Margin="0,15,0,0"/>
+                                    <TextBox x:Name="txtBloquePropietarioCreacion"  Grid.Column="1" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" 
+                                        materialDesign:HintAssist.Hint="Bloque" MaxLength="10" Margin="20,0,0,0" materialDesign:TextFieldAssist.HasClearButton="True"  >
+                                        <TextBox.Text>
+                                            <Binding Path="CambioEnTexto.BloquePropietarioCreacion" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <viewModel:ReglaValidacionObligatorio ValidatesOnTargetUpdated="True"/>
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
+                                    <TextBox x:Name="txtPisoPropietarioCreacion"  Grid.Column="2" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" 
+                                        materialDesign:HintAssist.Hint="Piso" MaxLength="10" Margin="20,0,0,0" materialDesign:TextFieldAssist.HasClearButton="True" >
+                                        <TextBox.Text>
+                                            <Binding Path="CambioEnTexto.PisoPropietarioCreacion" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <viewModel:ReglaValidacionObligatorio ValidatesOnTargetUpdated="True"/>
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
+                                    <TextBox x:Name="txtCodigoPostalPropietarioCreacion"  Grid.Column="3" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" 
+                                        materialDesign:HintAssist.Hint="Código Postal" MaxLength="5" Margin="20,0,0,0" materialDesign:TextFieldAssist.HasClearButton="True"  >
+                                        <TextBox.Text>
+                                            <Binding Path="CambioEnTexto.CodigoPostalPropietarioCreacion" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <viewModel:ReglaValidacionEnteros ValidatesOnTargetUpdated="True"/>
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
+                                </Grid>
+
+                                <Grid Margin="0" Grid.Row="6">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <materialDesign:PackIcon Grid.Column="0" Foreground="{Binding ElementName=btnBorrarCamposPropitario, Path=BorderBrush}" Kind="HomeCityOutline" VerticalAlignment="Center"  
+                                        Width="25" Height="25" Margin="0,15,0,0"/>
+                                    <TextBox x:Name="txtLocalidadPropietarioCreacion"  Grid.Column="1" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" 
+                                            materialDesign:HintAssist.Hint="Localidad" MaxLength="60" Margin="20,0,0,0" materialDesign:TextFieldAssist.HasClearButton="True"  >
+                                        <TextBox.Text>
+                                            <Binding Path="CambioEnTexto.LocalidadPropietarioCreacion" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <viewModel:ReglaValidacionObligatorio ValidatesOnTargetUpdated="True"/>
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
+                                    <TextBox x:Name="txtProvinciaPropietarioCreacion"  Grid.Column="2" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" 
+                                        materialDesign:HintAssist.Hint="Provincia" MaxLength="60" Margin="20,0,0,0" materialDesign:TextFieldAssist.HasClearButton="True"  >
+                                        <TextBox.Text>
+                                            <Binding Path="CambioEnTexto.ProvinciaPropietarioCreacion" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <viewModel:ReglaValidacionObligatorio ValidatesOnTargetUpdated="True"/>
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
+                                </Grid>
+
+                            </Grid>
+
+                            
                         </Grid>
 
 
-                        <StackPanel Orientation="Vertical" Grid.Column="2" VerticalAlignment="Bottom">
-                            <!--<Button x:Name="btnValidarCampos" Margin="10,10,10,0" Content="Validar nombre de usuario" Style="{StaticResource MaterialDesignRaisedButton}"
-                            ToolTip="Resource name: MaterialDesignRaisedSecondaryLightButton" Click="btnValidarCampos_Click"/>
-                            <Button x:Name="btnBorrarCampos" Margin="10,10,10,0" Content="Borrar campos" Style="{StaticResource MaterialDesignRaisedButton}"
-                            ToolTip="Resource name: MaterialDesignRaisedSecondaryLightButton" Click="btnBorrarCampos_Click"/>
-                            <Button x:Name="btnCrearUsuario" Margin="10" Content="Crear Usuario" Style="{StaticResource MaterialDesignRaisedSecondaryLightButton}"
-                            ToolTip="Resource name: MaterialDesignRaisedSecondaryLightButton" IsEnabled="False" Click="btnCrearUsuario_Click"/>-->
+                        <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Bottom">
+                            
+                            <Button x:Name="btnBorrarCamposPropitario" Margin="10,10,10,0" Content="Borrar campos" Style="{StaticResource MaterialDesignRaisedButton}"
+                                ToolTip="Vacia todos os campos del formulario" Click="btnBorrarCamposPropietario_Click"/>
+                            <Button x:Name="btnCrearPropietario" Margin="10" Content="Crear Propietario" Style="{StaticResource MaterialDesignRaisedSecondaryLightButton}"
+                                ToolTip="Crea el propietario en la base de datos" IsEnabled="False" Click="btnCrearPropietario_Click"/>
 
                         </StackPanel>
 

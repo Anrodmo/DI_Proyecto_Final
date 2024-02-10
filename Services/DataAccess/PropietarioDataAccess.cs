@@ -18,7 +18,7 @@ namespace DI_Proyecyo_Final.Services.DataAccess
         /// </summary>
         /// <param name="idPropietario"> id del propietario del que se quieren obtener los datos</param>
         /// <returns>objeto Usuario con los datos del usuario si existe o null si no existe.</returns>
-        public static Propietario ObtenerPropietarioPorId(int idPropietario)
+        internal static Propietario ObtenerPropietarioPorId(int idPropietario)
         {
             Propietario propietario = null;
             string query = "SELECT id, nombre, apellidos, nif, fecha_alta, email, telefono FROM propietarios WHERE id = @idPropietario;";
@@ -42,7 +42,7 @@ namespace DI_Proyecyo_Final.Services.DataAccess
                             propietario.NIF = resConsulta.GetString(3);
                             propietario.Fecha_alta = resConsulta.GetDateTime(4);
                             propietario.Email = resConsulta.GetString(5);
-                            propietario.Telefono = resConsulta.GetInt32(6);
+                            propietario.Telefono = resConsulta.GetInt64(6);
                             propietario.Direccion = DireccionDataAcces.getDireccion(propietario.Id);
                         }
                         resConsulta.Close();
@@ -59,7 +59,7 @@ namespace DI_Proyecyo_Final.Services.DataAccess
         }
 
 
-        public static List<Propietario> ObtenerTodosLosPropietarios()
+        internal static List<Propietario> ObtenerTodosLosPropietarios()
         {
             List<Propietario> listaPropietarios = new List<Propietario>();
             string query = "SELECT id, nombre, apellidos, nif, fecha_alta, email, telefono, direccion FROM propietarios;";
@@ -83,9 +83,9 @@ namespace DI_Proyecyo_Final.Services.DataAccess
                             propietario.NIF = resConsulta.GetString(3);
                             propietario.Fecha_alta = resConsulta.GetDateTime(4);
                             propietario.Email = resConsulta.GetString(5);
-                            propietario.Telefono = resConsulta.GetInt32(6);
-                            propietario.Id= resConsulta.GetInt32(7);
-                            propietario.Direccion = DireccionDataAcces.getDireccion(propietario.Id);
+                            propietario.Telefono = resConsulta.GetInt64(6);
+                            int idDireccion= resConsulta.GetInt32(7);
+                            propietario.Direccion = DireccionDataAcces.getDireccion(idDireccion);
                             listaPropietarios.Add(propietario);
                         }
                         resConsulta.Close();
@@ -102,7 +102,7 @@ namespace DI_Proyecyo_Final.Services.DataAccess
         }
 
 
-        public static bool modificarPropietario(Propietario nuevoPropietario)
+        internal static bool modificarPropietario(Propietario nuevoPropietario)
         {
             bool exito = false;
             string query = "UPDATE propietarios " +
@@ -147,6 +147,11 @@ namespace DI_Proyecyo_Final.Services.DataAccess
 
 
         internal static bool eliminarPropietario(Propietario propietario)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static bool crearPropietario(Propietario propietario)
         {
             throw new NotImplementedException();
         }
