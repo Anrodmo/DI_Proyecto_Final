@@ -103,12 +103,17 @@ namespace DI_Proyecyo_Final.Services.DataAccess
             return direccion;
         }
 
+        /// <summary>
+        /// Método que modifica un  registro de direccion de la BBDD.
+        /// </summary>
+        /// <param name="nuevaDireccion">  Objeto con  la Id original pero  resto de atributos actualziados</param>
+        /// <returns> True si la operacion se realizó con éxito, False en  caso contrario.</returns>
         public static bool modificarDireccion(Direccion nuevaDireccion)
         {
             bool exito = false;
             string query = "UPDATE direcciones " +
                            "SET calle = @calle, bloque = @bloque, piso = @piso, " +
-                           "localidad = @localidad, provincia = @provincia, cod_postal = @codPostal " +
+                           "localidad = @localidad, provincia = @provincia, cod_postal = @codPostal, uid = @uid " +
                            "WHERE id = @id;";
             try
             {
@@ -125,8 +130,47 @@ namespace DI_Proyecyo_Final.Services.DataAccess
                         comandoModificar.Parameters.AddWithValue("@localidad", nuevaDireccion.Localidad);
                         comandoModificar.Parameters.AddWithValue("@provincia", nuevaDireccion.Provincia);
                         comandoModificar.Parameters.AddWithValue("@codPostal", nuevaDireccion.CodPostal);
+                        comandoModificar.Parameters.AddWithValue("@uid", Sesion.UsuarioActivo.Id);
 
                         int filasAfectadas = comandoModificar.ExecuteNonQuery();
+
+                        if (filasAfectadas > 0)
+                        {
+                            exito = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                MessageBox.Show("Error de conexión con la BBDD", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            return exito;
+        }
+
+
+        /// <summary>
+        /// Método que borra una  direccion de la BBDD a partir de su ID
+        /// </summary>
+        /// <param name="direccionId"></param>
+        /// <returns> True si la operacion se realizó con éxito, False en  caso contrario.</returns>
+        public static bool borrarDireccion(int direccionId)
+        {
+            bool exito = false;
+            string query = "DELETE FROM direcciones WHERE id = @direccionId";
+
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(ConexionData.CadenaConexion))
+                {
+                    connection.Open();
+                    using (MySqlCommand comandoBorrar = new MySqlCommand(query, connection))
+                    {
+                        comandoBorrar.Parameters.AddWithValue("@direccionId", direccionId);
+
+                        int filasAfectadas = comandoBorrar.ExecuteNonQuery();
 
                         if (filasAfectadas > 0)
                         {

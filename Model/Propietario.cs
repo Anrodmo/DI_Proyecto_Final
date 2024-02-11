@@ -20,9 +20,7 @@ namespace DI_Proyecyo_Final.Model
         Direccion direccion;
 
         public Propietario() { }
-
-        
-
+       
         public string Nombre
         {
             get => nombre; 
@@ -94,6 +92,11 @@ namespace DI_Proyecyo_Final.Model
         internal bool modificarPropietario()
         {
             return PropietarioDataAccess.modificarPropietario(this);
+        }
+
+        internal bool crearPropietario()
+        {
+            return PropietarioDataAccess.crearPropietario(this);
         }
 
     }

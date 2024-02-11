@@ -33,6 +33,7 @@ namespace DI_Proyecyo_Final
         GuardarContraseñaUsuario = 5,
         UpdatePropietario = 6,
         DeletePropietario = 7,
+        CreatePropietario = 8,
     }
 
 
@@ -89,6 +90,18 @@ namespace DI_Proyecyo_Final
             //MessageBox.Show("Login exitoso. Realizando cambios en la ventana principal.");
             this.habilitarInterfaz(true);
             this.LoadPage(ViewModelSesion.getPathCarruselActual());
+
+            // ahora hacemos que el togle refleje el color del tema del usauri oque ha logeado
+            DarkModeToggleButton.IsChecked = Sesion.ConfiguracionUsuarioActivo.IsDarkTheme;
+            // y establecemos el logo claro/oscuro en consecuencia
+            BitmapImage bitmap = new BitmapImage();
+            string imagePath = DarkModeToggleButton.IsChecked == true ? imagePathOscuro : imagePathClaro;
+
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(imagePath, UriKind.Relative);
+            bitmap.EndInit();
+
+            logoImage.Source = bitmap;
         }
 
 

@@ -3,6 +3,7 @@ using DI_Proyecyo_Final.ViewModel;
 using Google.Protobuf.WellKnownTypes;
 using MahApps.Metro.Controls.Dialogs;
 using MaterialDesignThemes.Wpf;
+using Microsoft.Xaml.Behaviors.Core;
 using Org.BouncyCastle.Utilities;
 using System;
 using System.Collections.Generic;
@@ -154,6 +155,31 @@ namespace DI_Proyecyo_Final
             this.propietarioSeleccionado = null;
             this.opActual = OperacionActual.None;
             // eliminamos los errores de los  bindings de nombre y contraseña
+            BindingExpression be = txtNombrePropietarioGestion.GetBindingExpression(TextBox.TextProperty);
+            Validation.ClearInvalid(be);
+            be = txtNIFPropietarioGestion.GetBindingExpression(TextBox.TextProperty);
+            Validation.ClearInvalid(be);
+            be = txtApellidosPropietarioGestion.GetBindingExpression(TextBox.TextProperty);
+            Validation.ClearInvalid(be);
+            be = txtEmailPropietarioGestion.GetBindingExpression(TextBox.TextProperty);
+            Validation.ClearInvalid(be);
+            be = txtTelefonoPropietarioGestion.GetBindingExpression(TextBox.TextProperty);
+            Validation.ClearInvalid(be);
+            be = txtCallePropietarioGestion.GetBindingExpression(TextBox.TextProperty);
+            Validation.ClearInvalid(be);
+            be = txtBloquePropietarioGestion.GetBindingExpression(TextBox.TextProperty);
+            Validation.ClearInvalid(be);
+            be = txtPisoPropietarioGestion.GetBindingExpression(TextBox.TextProperty);
+            Validation.ClearInvalid(be);
+            be = txtLocalidadPropietarioGestion.GetBindingExpression(TextBox.TextProperty);
+            Validation.ClearInvalid(be);
+            be = txtProvinciaPropietarioGestion.GetBindingExpression(TextBox.TextProperty);
+            Validation.ClearInvalid(be);
+            be = txtCodigoPostalPropietarioGestion.GetBindingExpression(TextBox.TextProperty);
+            Validation.ClearInvalid(be);
+            be = dpickerFechaAlta.GetBindingExpression(DatePicker.SelectedDateProperty);
+            Validation.ClearInvalid(be);
+
 
         }
 
@@ -264,7 +290,7 @@ namespace DI_Proyecyo_Final
 
         private void btnIrAPropiedades_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         private void btnInformesPropietaro_Click(object sender, EventArgs e)
@@ -383,6 +409,11 @@ namespace DI_Proyecyo_Final
 
         private void btnBorrarCamposPropietario_Click(object sender, EventArgs e)
         {
+            borrarCamposCreacionPropietario();
+        }
+
+        private void borrarCamposCreacionPropietario()
+        {
             txtNIFPropietarioCreacion.Text = "";
             txtApellidosPropietarioCreacion.Text = "";
             txtNombrePropietarioCreacion.Text = "";
@@ -393,19 +424,28 @@ namespace DI_Proyecyo_Final
             txtPisoPropietarioCreacion.Text = "";
             txtCodigoPostalPropietarioCreacion.Text = "";
             txtLocalidadPropietarioCreacion.Text = "";
-            txtProvinciaPropietarioCreacion.Text = "";          
+            txtProvinciaPropietarioCreacion.Text = "";
             dpickerFechaAltaCreacion.SelectedDate = DateTime.Now;
         }
 
 
 
         private void btnCrearPropietario_Click(object sender, EventArgs e)
-        {
-
+        {           
+                this.opActual = OperacionActual.CreatePropietario;
+                txtVentanaEmergente2btn.Text = "¿ Desea crear el propietario " + txtNombrePropietarioCreacion.Text +
+                   " " + txtApellidosPropietarioCreacion.Text + " ?";
+            miDialogHost2btn.IsOpen = true;           
         }
 
         private void lanzarCrearPropietario()
         {
+            Propietario prop = obtenerPropietarioDeFormulario();
+            bool creadoConExito = prop.crearPropietario();
+
+            if (creadoConExito) borrarCamposCreacionPropietario();  // si se modifico correctamente borro los campos de creacion de propietario
+            String mensaje = creadoConExito ? "Propietario creado con éxito" : "Error, no se creo al propietario"; // mensaje segun resultado
+            lanzarSnackBar(mensaje, 2);  // lanzo el snackbar que informa al usuario.
 
         }
 
@@ -496,9 +536,14 @@ namespace DI_Proyecyo_Final
             if (opActual.Equals(OperacionActual.DeletePropietario))
             {
                 lanzarBorrarPropietario();
-            }else if (opActual.Equals(OperacionActual.UpdatePropietario))
+            }
+            else if (opActual.Equals(OperacionActual.UpdatePropietario))
             {
                 lanzarModificarUsuario();
+            }
+            else if (opActual.Equals(OperacionActual.CreatePropietario))
+            {
+                lanzarCrearPropietario();
             }
 
 
@@ -516,7 +561,7 @@ namespace DI_Proyecyo_Final
         }
 
         /// <summary>
-        /// Método que realiza las getiones necesarias en la IU al cambiar de TabItem
+        /// Método que realiza las gestiones necesarias en la IU al cambiar de TabItem
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -542,6 +587,10 @@ namespace DI_Proyecyo_Final
                     btnBorrarCamposPropietario_Click(null, null);
                     dpickerFechaAltaCreacion.SelectedDate = DateTime.Now;
 
+                }
+                else if (selectedTab == tabGestion)
+                {
+                    refrescarDataGrid();
                 }
             }
         }

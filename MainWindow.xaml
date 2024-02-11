@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DI_Proyecyo_Final"
+        xmlns:model="clr-namespace:DI_Proyecyo_Final.Model"
         xmlns:viewModel="clr-namespace:DI_Proyecyo_Final.ViewModel"
         xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf" 
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -26,6 +27,7 @@
                 <Setter Property="Margin" Value="16,4,16,4"/>
             </Style>
             <viewModel:ViewModelSesion x:Key="AccesosVistasViewModel" />
+            <model:ConfiguracionUsuarioActivo x:Key="ConfiguracionUsuarioActivo" />
         </ResourceDictionary>
         
     </Window.Resources>
@@ -181,7 +183,7 @@
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
                                             <TextBlock Margin="0,0,10,0" Text="Light" />
-                                            <ToggleButton x:Name="DarkModeToggleButton" IsChecked="False" Grid.Column="1" Click="MenuDarkModeButton_Click" />
+                                            <ToggleButton x:Name="DarkModeToggleButton"  Grid.Column="1" Click="MenuDarkModeButton_Click" />
                                             <TextBlock Grid.Column="2" Margin="10,0,0,0" Text="Dark" />
                                         </Grid>
                                         <Separator/>
