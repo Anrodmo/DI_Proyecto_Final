@@ -365,13 +365,7 @@
                                     <ComboBox x:Name="cmbRol" Grid.Column="1" Margin="20,0,40,0"  materialDesign:HintAssist.Hint="Rol del usuario" Style="{StaticResource MaterialDesignOutlinedComboBox}" SelectedIndex="1">
                                         <ComboBoxItem Content="Administrador" />
                                         <ComboBoxItem Content="Usuario" />
-                                       
-                                        
                                     </ComboBox>
-
-
-
-
                                 </Grid>
 
                                 <Grid Margin="20">

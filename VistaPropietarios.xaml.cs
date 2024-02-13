@@ -218,7 +218,7 @@ namespace DI_Proyecyo_Final
             txtFiltroNombre.Text = "";
         }
 
-        private void cargarCamposEnPropietrioSeleccionado()
+        private void cargarCamposEnPropietarioSeleccionado()
         {
             this.propietarioSeleccionado.NIF = txtNIFPropietarioGestion.Text.Trim();
             this.propietarioSeleccionado.Nombre = txtNombrePropietarioGestion.Text.Trim();
@@ -320,9 +320,9 @@ namespace DI_Proyecyo_Final
             }
         }
 
-        private void lanzarModificarUsuario()
+        private void lanzarModificarPropietario()
         {
-            cargarCamposEnPropietrioSeleccionado(); // leo los txt y los pongo en el usuario
+            cargarCamposEnPropietarioSeleccionado(); // leo los txt y los pongo en el usuario
             bool modificadoConExito = propietarioSeleccionado.modificarPropietario();
             if (modificadoConExito) refrescarDataGrid();  // si se modifico correctamente refresco la pestaña de gestion de usuarios
             String mensaje = modificadoConExito ? "Propietario modificado con éxito" : "Error, no se modifico al propietario"; // mensaje segun resultado
@@ -539,7 +539,7 @@ namespace DI_Proyecyo_Final
             }
             else if (opActual.Equals(OperacionActual.UpdatePropietario))
             {
-                lanzarModificarUsuario();
+                lanzarModificarPropietario();
             }
             else if (opActual.Equals(OperacionActual.CreatePropietario))
             {

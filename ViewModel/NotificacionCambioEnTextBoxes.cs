@@ -67,7 +67,6 @@ namespace DI_Proyecyo_Final.ViewModel
             }
         }
         
-
         /*===============================================================*/
         /*                Gestion de propietarios                        */
         /*===============================================================*/
@@ -83,7 +82,6 @@ namespace DI_Proyecyo_Final.ViewModel
         private string localidadPropietarioGestion;
         private string provinciaPropietarioGestion;
         
-
         public string NombrePropietarioGestion
         {
             get { return nombrePropietarioGestion; }
@@ -233,7 +231,6 @@ namespace DI_Proyecyo_Final.ViewModel
         private string localidadPropietarioCreacion;
         private string provinciaPropietarioCreacion;
 
-
         public string NifPropietarioCreacion
         {
             get { return nifPropietarioCreacion; }
@@ -366,6 +363,254 @@ namespace DI_Proyecyo_Final.ViewModel
                 }
             }
         }
+
+        /*===============================================================*/
+        /*                Gestion de propiedades                         */
+        /*===============================================================*/
+
+        private string nifPropiedadGestion;
+        private string descripcionPropiedadGestion;
+        private string tamañoPropiedadGestion;
+        private string callePropiedadGestion;
+        private string bloquePropiedadGestion;
+        private string pisoPropiedadGestion;
+        private string codigoPostalPropiedadGestion;
+        private string localidadPropiedadGestion;
+        private string provinciaPropiedadGestion;
+
+        public string NifPropiedadGestion
+        {
+            get { return nifPropiedadGestion; }
+            set
+            {
+                if (nifPropiedadGestion != value)
+                {
+                    nifPropiedadGestion = value;
+                    OnPropertyChanged(nameof(NifPropiedadGestion));
+                }
+            }
+        }
+        public string DescripcionPropiedadGestion
+        {
+            get { return descripcionPropiedadGestion; }
+            set
+            {
+                if (descripcionPropiedadGestion != value)
+                {
+                    descripcionPropiedadGestion = value;
+                    OnPropertyChanged(nameof(DescripcionPropiedadGestion));
+                }
+            }
+        }
+        public string TamañoPropiedadGestion
+        {
+            get { return tamañoPropiedadGestion; }
+            set
+            {
+                if (tamañoPropiedadGestion != value)
+                {
+                    tamañoPropiedadGestion = value;
+                    OnPropertyChanged(nameof(TamañoPropiedadGestion));
+                }
+            }
+        }
+        public string CallePropiedadGestion
+        {
+            get { return callePropiedadGestion; }
+            set
+            {
+                if (callePropiedadGestion != value)
+                {
+                    callePropiedadGestion = value;
+                    OnPropertyChanged(nameof(CallePropiedadGestion));
+                }
+            }
+        }
+        public string BloquePropiedadGestion
+        {
+            get { return bloquePropiedadGestion; }
+            set
+            {
+                if (bloquePropiedadGestion != value)
+                {
+                    bloquePropiedadGestion = value;
+                    OnPropertyChanged(nameof(BloquePropiedadGestion));
+                }
+            }
+        }
+        public string PisoPropiedadGestion
+        {
+            get { return pisoPropiedadGestion; }
+            set
+            {
+                if (pisoPropiedadGestion != value)
+                {
+                    pisoPropiedadGestion = value;
+                    OnPropertyChanged(nameof(PisoPropiedadGestion));
+                }
+            }
+        }
+        public string CodigoPostalPropiedadGestion
+        {
+            get { return codigoPostalPropiedadGestion; }
+            set
+            {
+                if (codigoPostalPropiedadGestion != value)
+                {
+                    codigoPostalPropiedadGestion = value;
+                    OnPropertyChanged(nameof(CodigoPostalPropiedadGestion));
+                }
+            }
+        }
+        public string LocalidadPropiedadGestion
+        {
+            get { return localidadPropiedadGestion; }
+            set
+            {
+                if (localidadPropiedadGestion != value)
+                {
+                    localidadPropiedadGestion = value;
+                    OnPropertyChanged(nameof(LocalidadPropiedadGestion));
+                }
+            }
+        }
+        public string ProvinciaPropiedadGestion
+        {
+            get { return provinciaPropiedadGestion; }
+            set
+            {
+                if (provinciaPropiedadGestion != value)
+                {
+                    provinciaPropiedadGestion = value;
+                    OnPropertyChanged(nameof(ProvinciaPropiedadGestion));
+                }
+            }
+        }
+
+        /*===============================================================*/
+        /*                Creación de propiedades                        */
+        /*===============================================================*/
+
+        private string nifPropiedadCreacion;
+        private string descripcionPropiedadCreacion;
+        private string tamañoPropiedadCreacion;
+        private string callePropiedadCreacion;
+        private string bloquePropiedadCreacion;
+        private string pisoPropiedadCreacion;
+        private string codigoPostalPropiedadCreacion;
+        private string localidadPropiedadCreacion;
+        private string provinciaPropiedadCreacion;
+
+        public string NifPropiedadCreacion
+        {
+            get { return nifPropiedadCreacion; }
+            set
+            {
+                if (nifPropiedadCreacion != value)
+                {
+                    nifPropiedadCreacion = value;
+                    OnPropertyChanged(nameof(NifPropiedadCreacion));
+                }
+            }
+        }
+        public string DescripcionPropiedadCreacion
+        {
+            get { return descripcionPropiedadCreacion; }
+            set
+            {
+                if (descripcionPropiedadCreacion != value)
+                {
+                    descripcionPropiedadCreacion = value;
+                    OnPropertyChanged(nameof(DescripcionPropiedadCreacion));
+                }
+            }
+        }
+        public string TamañoPropiedadCreacion
+        {
+            get { return tamañoPropiedadCreacion; }
+            set
+            {
+                if (tamañoPropiedadCreacion != value)
+                {
+                    tamañoPropiedadCreacion = value;
+                    OnPropertyChanged(nameof(TamañoPropiedadCreacion));
+                }
+            }
+        }
+        public string CallePropiedadCreacion
+        {
+            get { return callePropiedadCreacion; }
+            set
+            {
+                if (callePropiedadCreacion != value)
+                {
+                    callePropiedadCreacion = value;
+                    OnPropertyChanged(nameof(CallePropiedadCreacion));
+                }
+            }
+        }
+        public string BloquePropiedadCreacion
+        {
+            get { return bloquePropiedadCreacion; }
+            set
+            {
+                if (bloquePropiedadCreacion != value)
+                {
+                    bloquePropiedadCreacion = value;
+                    OnPropertyChanged(nameof(BloquePropiedadCreacion));
+                }
+            }
+        }
+        public string PisoPropiedadCreacion
+        {
+            get { return pisoPropiedadCreacion; }
+            set
+            {
+                if (pisoPropiedadCreacion != value)
+                {
+                    pisoPropiedadCreacion = value;
+                    OnPropertyChanged(nameof(PisoPropiedadCreacion));
+                }
+            }
+        }
+        public string CodigoPostalPropiedadCreacion
+        {
+            get { return codigoPostalPropiedadCreacion; }
+            set
+            {
+                if (codigoPostalPropiedadCreacion != value)
+                {
+                    codigoPostalPropiedadCreacion = value;
+                    OnPropertyChanged(nameof(CodigoPostalPropiedadCreacion));
+                }
+            }
+
+        }
+        public string LocalidadPropiedadCreacion
+        {
+            get { return localidadPropiedadCreacion; }
+            set
+            {
+                if (localidadPropiedadCreacion != value)
+                {
+                    localidadPropiedadCreacion = value;
+                    OnPropertyChanged(nameof(LocalidadPropiedadCreacion));
+                }
+            }
+        }
+        public string ProvinciaPropiedadCreacion
+        {
+            get { return provinciaPropiedadCreacion; }
+            set
+            {
+                if (provinciaPropiedadCreacion != value)
+                {
+                    provinciaPropiedadCreacion = value;
+                    OnPropertyChanged(nameof(ProvinciaPropiedadCreacion));
+                }
+            }
+        }
+
 
 
 

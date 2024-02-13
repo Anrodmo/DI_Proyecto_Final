@@ -34,6 +34,9 @@ namespace DI_Proyecyo_Final
         UpdatePropietario = 6,
         DeletePropietario = 7,
         CreatePropietario = 8,
+        UpdatePropiedad = 9,
+        DeletePropiedad = 10,
+        CreatePropiedad = 11,
     }
 
 
