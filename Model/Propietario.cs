@@ -99,6 +99,10 @@ namespace DI_Proyecyo_Final.Model
             return PropietarioDataAccess.crearPropietario(this);
         }
 
+        internal static int obtenerIdPropietarioPorNIF(string text)
+        {
+            return PropietarioDataAccess.obtenerIdPropietarioPorNIF(text);
+        }
     }
 
 

@@ -23,7 +23,6 @@ namespace DI_Proyecyo_Final.Model
     {
         private int id;
         private int idPropietario;
-        //private Propietario propietario;
         private string nifPropietario;
         private string descripcion;
         private int tamaño;
@@ -98,6 +97,11 @@ namespace DI_Proyecyo_Final.Model
         internal bool crearPropiedad()
         {
             return PropiedadDataAccess.crearPropiedad(this);
+        }
+
+        internal bool modificarPropiedadPropietario()
+        {
+            return PropiedadDataAccess.actualizarPropietario(this);
         }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using DI_Proyecyo_Final.Model;
+using DI_Proyecyo_Final.Services.DataAccess;
 using DI_Proyecyo_Final.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,6 +29,8 @@ namespace DI_Proyecyo_Final
         private OperacionActual opActual = OperacionActual.None;
         private Propiedad propiedadSeleccionada = null;
         private List<Propiedad> listaPropiedades;
+        private MensajeroPropiedades2Propietarios mensajero = App.EventoPropiedades2Propietarios;
+
         public VistaPropiedades()
         {
             InitializeComponent();
@@ -41,18 +45,24 @@ namespace DI_Proyecyo_Final
             agregarEventoATextBoxesCreacion();  // lo mismo para el boton de crear propiedad
 
             dataGridPropiedades.Items.Clear();
-            listaPropiedades = Propiedad.obtenerListaPropiedades();
-            if (listaPropiedades is null)
-            {
-                txtVentanaEmergente1btn.Text = "Error de conexión";
-                miDialogHost1btn.IsOpen = true;
-            }
-            else
-            {   // aqui uso CollectionView porque quiero aplicar filtros al datagrid
-                viewPropiedades = (CollectionView)CollectionViewSource.GetDefaultView(listaPropiedades);
-                dataGridPropiedades.ItemsSource = viewPropiedades;
-            }
+            //listaPropiedades = Propiedad.obtenerListaPropiedades();
+            //if (listaPropiedades is null)
+            //{
+            //    txtVentanaEmergente1btn.Text = "Error de conexión";
+            //    miDialogHost1btn.IsOpen = true;
+            //}
+            //else
+            //{   // aqui uso CollectionView porque quiero aplicar filtros al datagrid
+            //    viewPropiedades = (CollectionView)CollectionViewSource.GetDefaultView(listaPropiedades);
+            //    dataGridPropiedades.ItemsSource = viewPropiedades;
+            //}
+                     
+
         }
+
+        
+
+       
 
         /*==============================================================================================================================*/
         /*                      GESTIÓN DE LISTAR, MODIFICAR, ELIMINAR PROPIEDADES                                                      */
@@ -77,6 +87,7 @@ namespace DI_Proyecyo_Final
                 btnIrAPropietario.IsEnabled = true;
                 btnInformesPropiedad.IsEnabled = true;
 
+                btnEditarPropiedadPropietario.IsEnabled = true;
                 btnEditarPropiedad.IsEnabled = true;
                 btnGuardarPropiedad.IsEnabled = false;
 
@@ -110,32 +121,54 @@ namespace DI_Proyecyo_Final
             habilitarCampos(false);
             btnIrAPropietario.IsEnabled = false;
             btnInformesPropiedad.IsEnabled = false;
-            
+
+            btnEditarPropiedadPropietario.IsEnabled = false;
+            btnGuardarPropiedadPropietario.IsEnabled = false;
             btnEditarPropiedad.IsEnabled = false;
             btnGuardarPropiedad.IsEnabled = false;
 
             btnBorrarPropiedad.IsEnabled = false;
 
-            dataGridPropiedades.UnselectAll();
-            listaPropiedades = Propiedad.obtenerListaPropiedades();
-            if (listaPropiedades is null) // recojo el null desde Controlador si hay fallo en conexión
+            // por defecto se carga la tab 1 y al cargase se llama  a este método, si venimos de propietarios para crear propiedad
+            // nos vamos a la tab de crear. Esto no se puede hacer en el init componentes porque se ejecuta antes de que se crea la
+            // IU. Tengo que hacerlo una vez que se ha construido la IU. Y como este método es el primero que se carga tras la creación de la UI lo
+            // de la UI lo pongo aquí.
+
+            if (MensajeroAñadirPropiedad.Nif != null)
             {
-                dataGridPropiedades.Items.Clear();
-                txtVentanaEmergente1btn.Text = "Error de conexión";
-                miDialogHost1btn.IsOpen = true;
+                TabControlGestion.SelectedItem = tabCrearProp;
             }
             else
             {
-                viewPropiedades = (CollectionView)CollectionViewSource.GetDefaultView(listaPropiedades);
-                dataGridPropiedades.ItemsSource = viewPropiedades;
+                dataGridPropiedades.UnselectAll();
+                listaPropiedades = Propiedad.obtenerListaPropiedades();
+                if (listaPropiedades is null) // recojo el null desde Controlador si hay fallo en conexión
+                {
+                    dataGridPropiedades.Items.Clear();
+                    txtVentanaEmergente1btn.Text = "Error de conexión";
+                    miDialogHost1btn.IsOpen = true;
+                }
+                else
+                {
+                    viewPropiedades = (CollectionView)CollectionViewSource.GetDefaultView(listaPropiedades);
+                    dataGridPropiedades.ItemsSource = viewPropiedades;
+                }
+
+                // miramos si venimos de un evento desde propietarios
+                if (MensajeroPropietarios2Propiedades.Nif != null)
+                {           // si es que si añadimos el nif como filtro
+                    txtFiltroNIFPropietario.Text = MensajeroPropietarios2Propiedades.Nif;
+                    MensajeroPropietarios2Propiedades.Nif = null;
+                }
+
             }
 
             // ocultamos los iconos de verificacion de campos
-           
+
             // reinciamos las variables de control
             this.propiedadSeleccionada = null;
             this.opActual = OperacionActual.None;
-            // eliminamos los errores de los  bindings de nombre y contraseña
+            // eliminamos los errores de los  bindings 
             BindingExpression be = txtNIFPropiedadGestion.GetBindingExpression(TextBox.TextProperty);
             Validation.ClearInvalid(be);
             be = txtDescripcionPropiedadGestion.GetBindingExpression(TextBox.TextProperty);
@@ -180,8 +213,7 @@ namespace DI_Proyecyo_Final
 
 
         private void habilitarCampos(bool habilitar)
-        {
-            txtNIFPropiedadGestion.IsEnabled = habilitar;
+        {            
             txtDescripcionPropiedadGestion.IsEnabled = habilitar;
             txtTamañoPropiedadGestion.IsEnabled= habilitar;
             txtObservacionesGestion.IsEnabled = habilitar;
@@ -194,11 +226,7 @@ namespace DI_Proyecyo_Final
             txtPisoPropiedadGestion.IsEnabled = habilitar;
             txtCodigoPostalPropiedadGestion.IsEnabled = habilitar;
             txtLocalidadPropiedadGestion.IsEnabled = habilitar;
-            txtProvinciaPropiedadGestion.IsEnabled = habilitar;
-
-            txtFiltroNIFPropietario.IsEnabled = habilitar;
-            txtFiltroDescripcion.IsEnabled = habilitar;
-
+            txtProvinciaPropiedadGestion.IsEnabled = habilitar;         
         }
 
         private void rellenarCamposGestion(Propiedad propiedad)
@@ -219,8 +247,7 @@ namespace DI_Proyecyo_Final
         }
 
         private void cargarCamposEnPropiedadSeleccionado()
-        {
-            this.propiedadSeleccionada.NIFPropietario = txtNIFPropiedadGestion.Text.Trim();
+        {           
             this.propiedadSeleccionada.Descripcion = txtDescripcionPropiedadGestion.Text.Trim();
             this.propiedadSeleccionada.Tamaño = int.Parse(txtTamañoPropiedadGestion.Text.Trim());
             this.propiedadSeleccionada.Observaciones = txtObservacionesGestion.Text.Trim();
@@ -243,10 +270,10 @@ namespace DI_Proyecyo_Final
                 // Aplica el filtro al nombre de propiedad
                 viewPropiedades.Filter = item =>
                 {
-                    if (item is Propietario propietario)
+                    if (item is Propiedad propiedad)
                     {
                         // Comparación sin distinción entre mayúsculas y minúsculas
-                        return propietario.Nombre.IndexOf(txtFiltroDescripcion.Text, StringComparison.OrdinalIgnoreCase) != -1;
+                        return propiedad.Descripcion.IndexOf(txtFiltroDescripcion.Text, StringComparison.OrdinalIgnoreCase) != -1;
                     }
                     return false;
                 };
@@ -261,10 +288,10 @@ namespace DI_Proyecyo_Final
                 // Aplica el filtro al NIf del propiedad
                 viewPropiedades.Filter = item =>
                 {
-                    if (item is Propietario propietario)
+                    if (item is Propiedad propiedad)
                     {
                         // Comparación sin distinción entre mayúsculas y minúsculas
-                        return propietario.NIF.IndexOf(txtFiltroNIFPropietario.Text, StringComparison.OrdinalIgnoreCase) != -1;
+                        return propiedad.NIFPropietario.IndexOf(txtFiltroNIFPropietario.Text, StringComparison.OrdinalIgnoreCase) != -1;
                     }
                     return false;
                 };
@@ -275,13 +302,13 @@ namespace DI_Proyecyo_Final
         {
             // Verifica el estado de validación de todos los campos y que se este editando al propietrio
             btnGuardarPropiedad.IsEnabled = ValidarTodosLosCampos() && opActual.Equals(OperacionActual.UpdatePropiedad);
+            btnGuardarPropiedadPropietario.IsEnabled = ValidarNifPropietario() && opActual.Equals(OperacionActual.UpdateNifPropiedad);
         }
        
 
         private bool ValidarTodosLosCampos()
         {          
-            return !Validation.GetHasError(txtNIFPropiedadGestion) &&
-                   !Validation.GetHasError(txtDescripcionPropiedadGestion) &&
+            return !Validation.GetHasError(txtDescripcionPropiedadGestion) &&
                    !Validation.GetHasError(txtTamañoPropiedadGestion) &&                  
                    !Validation.GetHasError(txtCallePropiedadGestion) &&
                    !Validation.GetHasError(txtBloquePropiedadGestion) &&
@@ -290,6 +317,11 @@ namespace DI_Proyecyo_Final
                    !Validation.GetHasError(txtLocalidadPropiedadGestion) &&
                    !Validation.GetHasError(txtProvinciaPropiedadGestion);
 
+        }
+
+        private bool ValidarNifPropietario()
+        {
+            return !Validation.GetHasError(txtNIFPropiedadGestion);
         }
 
         private void agregarEventoATextBoxes()
@@ -310,15 +342,61 @@ namespace DI_Proyecyo_Final
             txtFiltroDescripcion.TextChanged += txtFiltroDescripcion_TextChanged;
         }
 
-
+        /// <summary>
+        /// Método que almacena el nif del propietario en el campo estatico del evento y lo lanza
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param> 
         private void btnIrAPropietario_Click(object sender, RoutedEventArgs e)
         {
 
+            MensajeroPropiedades2Propietarios.Nif = txtNIFPropiedadGestion.Text.Trim();
+            mensajero.OnPropiedades2Propietarios(); // <-- evento que se recoge en MainWindow.xaml.cs 
         }
 
         private void btnInformesPropiedad_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void btnEditarPropiedadPropietario_Click(object sender, RoutedEventArgs e)
+        {
+            opActual = OperacionActual.UpdateNifPropiedad;
+            txtNIFPropiedadGestion.IsEnabled = true;
+        }
+
+        private void btnGuardarPropiedadPropietario_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.propiedadSeleccionada != null)
+            {
+                this.opActual = OperacionActual.UpdateNifPropiedad;
+                txtVentanaEmergente2btn.Text = "¿ Desea cambiar la propiedad " + propiedadSeleccionada.Descripcion
+                    + "\ndel propietario " + this.propiedadSeleccionada.NIFPropietario
+                    + " al propietario "+txtNIFPropiedadGestion.Text+ " ?";
+                miDialogHost2btn.IsOpen = true;
+            }
+        }
+
+        private void lanzarGuardarPropiedadPropietario()
+        {
+            bool modificadoConExito = false;
+            int resultado = Propietario.obtenerIdPropietarioPorNIF(txtNIFPropiedadGestion.Text);
+            if (resultado != -1) 
+            {
+                this.propiedadSeleccionada.IdPropietario = resultado;
+                modificadoConExito = this.propiedadSeleccionada.modificarPropiedadPropietario();
+            }
+            else
+            {
+                btnGuardarPropiedadPropietario.IsEnabled = false;
+                BindingExpression bindingExpression = txtNIFPropiedadGestion.GetBindingExpression(TextBox.TextProperty);
+                bindingExpression.UpdateSource();
+                Validation.MarkInvalid(bindingExpression, new ValidationError(new ReglaValidacionObligatorio(), bindingExpression,"NIF no consta", null));
+            }
+            
+            if (modificadoConExito) refrescarDataGrid();  // si se modifico correctamente refresco la pestaña de gestion de usuarios
+            String mensaje = modificadoConExito ? "Propiedad modificada con éxito" : "Error, no se modifico la propiedad"; // mensaje segun resultado
+            lanzarSnackBar(mensaje, 2);  // lanzo el snackbar que informa al usuario.
         }
 
         private void btnEditarPropiedad_Click(object sender, RoutedEventArgs e)
@@ -333,7 +411,7 @@ namespace DI_Proyecyo_Final
             {
                 this.opActual = OperacionActual.UpdatePropiedad;
                 txtVentanaEmergente2btn.Text = "¿ Desea modificar la propiedad "+propiedadSeleccionada.Descripcion
-                    +"\nal propetario "+this.propiedadSeleccionada.NIFPropietario+" ?";
+                    +"\ndel propietario "+this.propiedadSeleccionada.NIFPropietario+" ?";
                 miDialogHost2btn.IsOpen = true;
             }
         }
@@ -373,7 +451,7 @@ namespace DI_Proyecyo_Final
 
 
         /*==============================================================================================================================*/
-        /*                                            GESTIÓN DE CREAR PROPIETARIOS                                                     */
+        /*                                            GESTIÓN DE CREAR PROPIEDAD                                                    */
         /*==============================================================================================================================*/
 
         private void btnBorrarCamposPropiedad_Click(object sender, EventArgs e)
@@ -383,6 +461,7 @@ namespace DI_Proyecyo_Final
 
         private void borrarCamposCreacionPropiedad()
         {
+           
             txtNIFPropiedadCreacion.Text = "";
             txtDescripcionPropiedadCreacion.Text = "";
             txtTamañoPropiedadCreacion.Text = "";
@@ -403,30 +482,46 @@ namespace DI_Proyecyo_Final
         private void btnCrearPropiedad_Click(object sender, EventArgs e)
         {
             this.opActual = OperacionActual.CreatePropiedad;
-            txtVentanaEmergente2btn.Text = "¿ Desea crear la propiedad "+txtDescripcionPropiedadCreacion+"" +
-                "\npara el propiedad "+txtNIFPropiedadCreacion+" ?";
+            txtVentanaEmergente2btn.Text = "¿ Desea crear la propiedad "+txtDescripcionPropiedadCreacion.Text+"" +
+                "\npara el propietario "+txtNIFPropiedadCreacion.Text+" ?";
             miDialogHost2btn.IsOpen = true;
         }
 
         private void lanzarCrearPropiedad()
         {
-            Propiedad prop = obtenerPropiedadDeFormulario();
-            bool creadoConExito = prop.crearPropiedad();
+            Propiedad prop;
+            bool creadoConExito = false;
+            string mensaje = "";
 
-            if (creadoConExito) borrarCamposCreacionPropiedad();  // si se modifico correctamente borro los campos de creacion de propiedad
-            String mensaje = creadoConExito ? "Propiedad creada con éxito" : "Error, no se creo la propiedad"; // mensaje segun resultado
+            int idPropietario = Propietario.obtenerIdPropietarioPorNIF(txtNIFPropiedadCreacion.Text.Trim() );
+            if(idPropietario != -1)
+            {
+                prop = obtenerPropiedadDeFormulario(idPropietario);
+                creadoConExito = prop.crearPropiedad();
+                mensaje = creadoConExito ? "Propiedad creada con éxito" : "Error, no se creo la propiedad"; // mensaje segun resultado
+            }
+            else
+            {
+                BindingExpression bindingExpression = txtNIFPropiedadCreacion.GetBindingExpression(TextBox.TextProperty);
+                bindingExpression.UpdateSource();
+                Validation.MarkInvalid(bindingExpression, new ValidationError(new ReglaValidacionObligatorio(), bindingExpression, "NIF no consta", null));
+                mensaje = "El NIF no corresponde con ningún usuario de la BBDD";
+                btnCrearPropiedad.IsEnabled = false;
+            }           
+            if (creadoConExito) borrarCamposCreacionPropiedad();  // si se modifico correctamente borro los campos de creacion de propiedad            
             lanzarSnackBar(mensaje, 2);  // lanzo el snackbar que informa al usuario.
         }
 
-        private Propiedad obtenerPropiedadDeFormulario()
+        private Propiedad obtenerPropiedadDeFormulario(int idPropietario)
         {
             Propiedad propiedad = new Propiedad();
+            propiedad.IdPropietario = idPropietario;
             propiedad.Descripcion = txtDescripcionPropiedadCreacion.Text.Trim();
             propiedad.NIFPropietario = txtNIFPropiedadCreacion.Text.Trim();
             propiedad.Observaciones = txtObservacionesPropiedadCreacion.Text.Trim();
 
-            propiedad.TipoPropiedad = (TipoPropiedad)(cmbTipoPropiedadCrear.SelectedIndex - 1);
-            propiedad.Tamaño = int.TryParse(txtTamañoPropiedadCreacion.Text.Trim(), out int telefono) ? telefono : 0;
+            propiedad.TipoPropiedad = (TipoPropiedad)(cmbTipoPropiedadCrear.SelectedIndex + 1);
+            propiedad.Tamaño = int.TryParse(txtTamañoPropiedadCreacion.Text.Trim(), out int tamaño) ? tamaño : 0;
 
             propiedad.Direccion = new Direccion();
             propiedad.Direccion.Calle = txtCallePropiedadCreacion.Text.Trim();
@@ -441,8 +536,9 @@ namespace DI_Proyecyo_Final
 
         private void TextBox_TextCrearChanged(object sender, TextChangedEventArgs e)
         {
-            // Verifica el estado de validación de todos los campos y que se este editando al propietrio
+            // Verifica el estado de validación de todos los campos 
             btnCrearPropiedad.IsEnabled = ValidarTodosLosCamposCrear();
+            
         }
 
 
@@ -506,6 +602,10 @@ namespace DI_Proyecyo_Final
             {
                 lanzarCrearPropiedad();
             }
+            else if(opActual.Equals(OperacionActual.UpdateNifPropiedad))
+            {
+                lanzarGuardarPropiedadPropietario();
+            }
 
 
             opActual = OperacionActual.None;
@@ -531,8 +631,8 @@ namespace DI_Proyecyo_Final
             if (e.AddedItems.Count > 0)
             {
                 TabItem selectedTab = e.AddedItems[0] as TabItem;
-
-                if ( selectedTab !=null && selectedTab == tabCrearProp)   // para actualziar los errores y vaciar los campos
+              
+                if ( selectedTab !=null && selectedTab == tabCrearProp)   // para actualizar los errores y vaciar los campos
                 {
                     txtNIFPropiedadCreacion.Text = "1";
                     txtDescripcionPropiedadCreacion.Text = "1";
@@ -546,12 +646,20 @@ namespace DI_Proyecyo_Final
                     txtProvinciaPropiedadCreacion.Text = "1";
 
                     btnBorrarCamposPropiedad_Click(null, null);
+
+                    if(MensajeroAñadirPropiedad.Nif != null)
+                    {   // si venimos de un propietario para añadir propiedad ponemos el nif
+                        txtNIFPropiedadCreacion.Text = MensajeroAñadirPropiedad.Nif;
+                        MensajeroAñadirPropiedad.Nif = null;
+                    }                                 
                 }
                 else if (selectedTab == tabGestionProp)
                 {
                     refrescarDataGrid();
                 }
             }
+
+            
         }
 
         

@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MaterialDesignColors;
+using System.Diagnostics;
 // using System.Web.UI.WebControls;
 
 namespace DI_Proyecyo_Final
@@ -36,7 +37,8 @@ namespace DI_Proyecyo_Final
         CreatePropietario = 8,
         UpdatePropiedad = 9,
         DeletePropiedad = 10,
-        CreatePropiedad = 11,
+        UpdateNifPropiedad = 11,
+        CreatePropiedad = 12,
     }
 
 
@@ -53,6 +55,10 @@ namespace DI_Proyecyo_Final
         private string imagePathClaro = "Resources/logo_claro.png";
         private MensajeroLogIn eventoLogIn = App.MensajeriaLoginCompartida;
         private MensajeroLogOut eventoLogOut = App.MensajeroLogOut;
+        private MensajeroPropietarios2Propiedades eventoPropietarios2Propiedades = App.EventoPropietarios2Propiedades;
+        private MensajeroPropiedades2Propietarios eventoPropiedades2Propietarios = App.EventoPropiedades2Propietarios;
+        private MensajeroAñadirPropiedad eventoAñadirPropiedad = App.EventoAñadirPropiedad;
+
 
         public MainWindow()
         {
@@ -61,11 +67,29 @@ namespace DI_Proyecyo_Final
             contenedorDataContext.notificadorToggleButtons= new NotificadorToggleButtons();
             DataContext = contenedorDataContext;
             logoImage = FindName("logo") as Image;
-
-            eventoLogIn.LoginExitoso += Mensajeria_LoginExitoso; //  me suscribo al evento de LoginExitoso
+            //  me suscribo a los eventos que se lanzan entre ventanas
+            eventoLogIn.LoginExitoso += Mensajeria_LoginExitoso; 
             eventoLogOut.LogOut += EventoLogOut_LogOut;
+            eventoPropietarios2Propiedades.Propietarios2Propiedades += Evento_Propietarios2Propiedades;
+            eventoPropiedades2Propietarios.Propiedades2Propietarios += Evento_Propiedades2Propietarios;
+            eventoAñadirPropiedad.AñadirPropiedad += Evento_AñadirPropiedad;
 
             this.habilitarInterfaz(false);
+        }
+
+        private void Evento_AñadirPropiedad(object sender, EventArgs e)
+        {
+            LoadPage(ViewModelSesion.getPathPropiedades());
+        }
+
+        private void Evento_Propiedades2Propietarios(object sender, EventArgs e)
+        {
+            LoadPage(ViewModelSesion.getPathPropietarios());
+        }
+
+        private void Evento_Propietarios2Propiedades(object sender, EventArgs e)
+        {
+            LoadPage( ViewModelSesion.getPathPropiedades() );
         }
 
         /// <summary>

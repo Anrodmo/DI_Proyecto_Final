@@ -106,7 +106,7 @@
                             </Grid>
 
                             <StackPanel DockPanel.Dock="Top">
-                                <Button Style="{StaticResource estiloBotonesMenu}" ToolTip="Gestiona de los usuarios." Click="MenuUsuarios_OnClick" x:Name="btnUsuarios">
+                                <Button Style="{StaticResource estiloBotonesMenu}" ToolTip="Gestion de los usuarios." Click="MenuUsuarios_OnClick" x:Name="btnUsuarios">
                                     <StackPanel Orientation="Horizontal" >
                                         <materialDesign:PackIcon Kind="Account" Height="25" Width="25"/>
                                         <TextBlock Text="Gestión de usuarios" Margin="10,0,0,0" FontSize="20"/>
@@ -271,8 +271,8 @@
                                     </StackPanel>
                                 </materialDesign:PopupBox>
 
-                                <TextBlock Margin="-152,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.Name="Gestión del propiedades"
-                                    FontSize="30" Text="Gestión de propiedades" />
+                                <TextBlock Margin="-152,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.Name="Gestión del propiedades para ANRODMO S.I."
+                                    FontSize="30" Text="ANRODMO Servicios Inmobiliarios" />
                             </DockPanel>
                         </materialDesign:ColorZone>
                         <Grid>

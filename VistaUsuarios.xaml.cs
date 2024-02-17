@@ -349,7 +349,7 @@ namespace DI_Proyecyo_Final
         {
             if(usuarioSelecionado.Id == 1)
             {
-                txtVentanaEmergente1btn.Text = "Este usuario es el administrador por defecto.\nNo se puede dehabilitar";
+                txtVentanaEmergente1btn.Text = "Este usuario es el administrador por defecto.\nNo se puede deshabilitar";
                 miDialogHost1btn.IsOpen = true;
                 chkEstado.IsChecked= true;
             }

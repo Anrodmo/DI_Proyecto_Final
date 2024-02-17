@@ -35,6 +35,8 @@ namespace DI_Proyecyo_Final
         private OperacionActual opActual = OperacionActual.None;
         private Propietario propietarioSeleccionado = null;
         private List<Propietario> listaPropietarios ;
+        private MensajeroPropietarios2Propiedades mensajero = App.EventoPropietarios2Propiedades;
+        private MensajeroAñadirPropiedad mensajeroAñadirPropiedad = App.EventoAñadirPropiedad;
 
 
         public VistaPropietarios()
@@ -52,17 +54,17 @@ namespace DI_Proyecyo_Final
             agregarEventoATextBoxesCreacion();  // lo mismo para el boton de crear propietario
 
             dataGridPropietarios.Items.Clear();
-            listaPropietarios = Propietario.obtenerListaPropietarios();
-            if (listaPropietarios is null)
-            {
-                txtVentanaEmergente1btn.Text = "Error de conexión";
-                miDialogHost1btn.IsOpen = true;
-            }
-            else
-            {   // aqui uso CollectionView porque quiero aplicar filtros al datagrid
-                viewPropietarios = (CollectionView)CollectionViewSource.GetDefaultView(listaPropietarios);
-                dataGridPropietarios.ItemsSource = viewPropietarios;
-            }
+            //listaPropietarios = Propietario.obtenerListaPropietarios();
+            //if (listaPropietarios is null)
+            //{
+            //    txtVentanaEmergente1btn.Text = "Error de conexión";
+            //    miDialogHost1btn.IsOpen = true;
+            //}
+            //else
+            //{   // aqui uso CollectionView porque quiero aplicar filtros al datagrid
+            //    viewPropietarios = (CollectionView)CollectionViewSource.GetDefaultView(listaPropietarios);
+            //    dataGridPropietarios.ItemsSource = viewPropietarios;
+            //}
 
 
         }
@@ -148,13 +150,19 @@ namespace DI_Proyecyo_Final
                 viewPropietarios = (CollectionView)CollectionViewSource.GetDefaultView(listaPropietarios);
                 dataGridPropietarios.ItemsSource = viewPropietarios;
             }
+            // miramos si venimos de un evento desde propiedades
+            if (MensajeroPropiedades2Propietarios.Nif != null)
+            {
+                txtFiltroNIF.Text = MensajeroPropiedades2Propietarios.Nif;
+                MensajeroPropiedades2Propietarios.Nif = null;
+            }
 
             // ocultamos los iconos de verificacion de campos
 
             // reinciamos las variables de control
             this.propietarioSeleccionado = null;
             this.opActual = OperacionActual.None;
-            // eliminamos los errores de los  bindings de nombre y contraseña
+            // eliminamos los errores de los  bindings 
             BindingExpression be = txtNombrePropietarioGestion.GetBindingExpression(TextBox.TextProperty);
             Validation.ClearInvalid(be);
             be = txtNIFPropietarioGestion.GetBindingExpression(TextBox.TextProperty);
@@ -288,9 +296,15 @@ namespace DI_Proyecyo_Final
             }
         }
 
+        /// <summary>
+        /// Método que almacena el nif del propietario en el campo estatico del evento y lo lanza
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnIrAPropiedades_Click(object sender, EventArgs e)
         {
-            
+            MensajeroPropietarios2Propiedades.Nif = txtNIFPropietarioGestion.Text.Trim();
+            mensajero.OnPropietarios2Propiedades(); // <-- evento que se recoge en MainWindow.xaml.cs  
         }
 
         private void btnInformesPropietaro_Click(object sender, EventArgs e)
@@ -298,9 +312,15 @@ namespace DI_Proyecyo_Final
 
         }
 
+        /// <summary>
+        /// Método que almacena el nif del propietario en el campo estatico del evento y lo lanza
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnAñadirPropiedadPropietario_Click(object sender, EventArgs e)
         {
-
+            MensajeroAñadirPropiedad.Nif = txtNIFPropietarioGestion.Text.Trim();
+            mensajeroAñadirPropiedad.OnAñadirPropiedad(); // <-- evento que se recoge en MainWindow.xaml.cs  
         }
 
         private void btnEditarPropietario_Click(object sender, EventArgs e)

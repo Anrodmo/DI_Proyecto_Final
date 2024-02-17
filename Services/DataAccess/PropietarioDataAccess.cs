@@ -253,5 +253,42 @@ namespace DI_Proyecyo_Final.Services.DataAccess
             return exito;
             
         }
+
+        /// <summary>
+        /// Método que dado un nif devuelve el id del propietario de la BBDD.
+        /// </summary>
+        /// <param name="nif"></param>
+        /// <returns> Id del propietario si existe o -1 si no existe propietario con ese id en la BBDD</returns>
+        internal static int obtenerIdPropietarioPorNIF(string nif)
+        {
+            int idPropietario = -1;
+            string query = "SELECT id FROM propietarios WHERE nif = @nif;";
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(ConexionData.CadenaConexion))
+                {
+                    connection.Open();
+                    using (MySqlCommand consulta = new MySqlCommand(query, connection))
+                    {
+                        consulta.Parameters.AddWithValue("@nif", nif);
+
+                        object resultado = consulta.ExecuteScalar();
+
+                        if (resultado != null && resultado != DBNull.Value)
+                        {
+                            idPropietario = Convert.ToInt32(resultado);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                MessageBox.Show("Error de conexión con la BBDD", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            return idPropietario;
+        }
+
+
     }
 }

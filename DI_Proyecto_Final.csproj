@@ -150,8 +150,11 @@
     <Compile Include="Services\DataAccess\DireccionDataAcces.cs" />
     <Compile Include="Services\ManagerXML\ParserXML.cs" />
     <Compile Include="ViewModel\ComparadorSecureString.cs" />
+    <Compile Include="ViewModel\MensajeroAñadirPropiedad.cs" />
     <Compile Include="ViewModel\MensajeroLogIn.cs" />
     <Compile Include="ViewModel\MensajeroLogOut.cs" />
+    <Compile Include="ViewModel\MensajeroPropiedades2Propietarios.cs" />
+    <Compile Include="ViewModel\MensajeroPropietarios2Propiedades.cs" />
     <Compile Include="ViewModel\NotificacionFechaCorrecta.cs" />
     <Compile Include="ViewModel\ReglaValidacionEmail.cs" />
     <Compile Include="ViewModel\ReglaValidacionFechaObligatoria.cs" />
