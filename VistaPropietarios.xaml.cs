@@ -398,8 +398,7 @@ namespace DI_Proyecyo_Final
                    !Validation.GetHasError(txtPisoPropietarioGestion) &&
                    !Validation.GetHasError(txtCodigoPostalPropietarioGestion) &&
                    !Validation.GetHasError(txtLocalidadPropietarioGestion) &&
-                   !Validation.GetHasError(txtProvinciaPropietarioGestion);
-           
+                   !Validation.GetHasError(txtProvinciaPropietarioGestion);         
         }
 
         private void agregarEventoATextBoxes()
@@ -459,12 +458,27 @@ namespace DI_Proyecyo_Final
         }
 
         private void lanzarCrearPropietario()
-        {
-            Propietario prop = obtenerPropietarioDeFormulario();
-            bool creadoConExito = prop.crearPropietario();
+        {          
+            Propietario prop;
+            bool creadoConExito = false;
+            string mensaje = "";
 
-            if (creadoConExito) borrarCamposCreacionPropietario();  // si se modifico correctamente borro los campos de creacion de propietario
-            String mensaje = creadoConExito ? "Propietario creado con éxito" : "Error, no se creo al propietario"; // mensaje segun resultado
+            int idPropietario = Propietario.obtenerIdPropietarioPorNIF(txtNIFPropietarioCreacion.Text.Trim());
+            if (idPropietario == -1)
+            {
+                prop = obtenerPropietarioDeFormulario();
+                creadoConExito = prop.crearPropietario();
+                mensaje = creadoConExito ? "Propietario creado con éxito" : "Error, no se creo al propietario"; // mensaje segun resultado
+            }
+            else
+            {
+                BindingExpression bindingExpression = txtNIFPropietarioCreacion.GetBindingExpression(TextBox.TextProperty);
+                bindingExpression.UpdateSource();
+                Validation.MarkInvalid(bindingExpression, new ValidationError(new ReglaValidacionObligatorio(), bindingExpression, "NIF existente", null));
+                mensaje = "Ya hay un propietario dado de alta con ese NIF";
+                btnCrearPropietario.IsEnabled = false;
+            }
+            if (creadoConExito) borrarCamposCreacionPropietario();  // si se modifico correctamente borro los campos de creacion de propiedad            
             lanzarSnackBar(mensaje, 2);  // lanzo el snackbar que informa al usuario.
 
         }

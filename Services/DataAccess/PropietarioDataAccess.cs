@@ -59,54 +59,6 @@ namespace DI_Proyecyo_Final.Services.DataAccess
             return propietario;
         }
 
-
-        /// <summary>
-        /// Método que devuelve una lista con todos los  propietarios de la BBDD
-        /// </summary>
-        /// <returns></returns>
-        internal static List<Propietario> ObtenerTodosLosPropietarios()
-        {
-            List<Propietario> listaPropietarios = new List<Propietario>();
-            string query = "SELECT id, nombre, apellidos, nif, fecha_alta, email, telefono, direccion FROM propietarios;";
-
-            try
-            {
-                using (MySqlConnection connection = new MySqlConnection(ConexionData.CadenaConexion))
-                {
-                    connection.Open();
-
-                    using (MySqlCommand comandoConsulta = new MySqlCommand(query, connection))
-                    {
-                        MySqlDataReader resConsulta = comandoConsulta.ExecuteReader();
-
-                        while (resConsulta.Read())
-                        {
-                            Propietario propietario = new Propietario();
-                            propietario.Id = resConsulta.GetInt32(0);
-                            propietario.Nombre = resConsulta.GetString(1);
-                            propietario.Apellidos = resConsulta.GetString(2);
-                            propietario.NIF = resConsulta.GetString(3);
-                            propietario.Fecha_alta = resConsulta.GetDateTime(4);
-                            propietario.Email = resConsulta.GetString(5);
-                            propietario.Telefono = resConsulta.GetInt64(6);
-                            int idDireccion= resConsulta.GetInt32(7);
-                            propietario.Direccion = DireccionDataAcces.getDireccion(idDireccion);
-                            listaPropietarios.Add(propietario);
-                        }
-                        resConsulta.Close();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                listaPropietarios = null;  // si hay un error de lectura no devuelvo lista                
-                Console.WriteLine(ex.ToString());
-                MessageBox.Show("Error de conexión con la BBDD", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            return listaPropietarios;
-        }
-
-
         /// <summary>
         /// Método que modifica un propietario de la  BBDD
         /// </summary>
@@ -155,7 +107,6 @@ namespace DI_Proyecyo_Final.Services.DataAccess
             }
             return exito;
         }
-
 
         /// <summary>
         /// Método que elimina un propietario de la BBDD, elimina tambien su direccion y sus propieadades
@@ -288,6 +239,112 @@ namespace DI_Proyecyo_Final.Services.DataAccess
             }
             return idPropietario;
         }
+
+        /// <summary>
+        /// Método que devuelve una lista con todos los  propietarios de la BBDD
+        /// </summary>
+        /// <returns></returns>
+        internal static List<Propietario> ObtenerTodosLosPropietarios()
+        {
+            List<Propietario> listaPropietarios = new List<Propietario>();
+            string query = "SELECT propietarios.id, nombre, apellidos, nif, fecha_alta, email, telefono, direccion, "
+                + "calle,bloque,piso,localidad,provincia,cod_postal "
+                +"FROM propietarios, direcciones WHERE direccion = direcciones.id;";
+
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(ConexionData.CadenaConexion))
+                {
+                    connection.Open();
+
+                    using (MySqlCommand comandoConsulta = new MySqlCommand(query, connection))
+                    {
+                        MySqlDataReader resConsulta = comandoConsulta.ExecuteReader();
+
+                        while (resConsulta.Read())
+                        {
+                            Propietario propietario = new Propietario();
+                            propietario.Id = resConsulta.GetInt32(0);
+                            propietario.Nombre = resConsulta.GetString(1);
+                            propietario.Apellidos = resConsulta.GetString(2);
+                            propietario.NIF = resConsulta.GetString(3);
+                            propietario.Fecha_alta = resConsulta.GetDateTime(4);
+                            propietario.Email = resConsulta.GetString(5);
+                            propietario.Telefono = resConsulta.GetInt64(6);
+                            propietario.Direccion = new Direccion();
+
+                            propietario.Direccion.Id = resConsulta.GetInt32("direccion");
+                            propietario.Direccion.Calle = resConsulta.GetString("calle");
+                            propietario.Direccion.Bloque = resConsulta.GetString("bloque");
+                            propietario.Direccion.Piso = resConsulta.GetString("piso");
+                            propietario.Direccion.Localidad = resConsulta.GetString("localidad");
+                            propietario.Direccion.Provincia = resConsulta.GetString("provincia");
+                            propietario.Direccion.CodPostal = resConsulta.GetString("cod_postal");
+                           // propietario.Direccion = DireccionDataAcces.getDireccion(idDireccion);
+                            listaPropietarios.Add(propietario);
+                        }
+                        resConsulta.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                listaPropietarios = null;  // si hay un error de lectura no devuelvo lista                
+                Console.WriteLine(ex.ToString());
+                MessageBox.Show("Error de conexión con la BBDD", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            return listaPropietarios;
+        }
+
+
+        /*      Reemplazado por doble consulta que ralentizaba      */
+
+        /// <summary>
+        /// Método que devuelve una lista con todos los  propietarios de la BBDD
+        /// </summary>
+        /// <returns></returns>
+        //internal static List<Propietario> ObtenerTodosLosPropietarios()
+        //{
+        //    List<Propietario> listaPropietarios = new List<Propietario>();
+        //    string query = "SELECT id, nombre, apellidos, nif, fecha_alta, email, telefono, direccion FROM propietarios;";
+
+        //    try
+        //    {
+        //        using (MySqlConnection connection = new MySqlConnection(ConexionData.CadenaConexion))
+        //        {
+        //            connection.Open();
+
+        //            using (MySqlCommand comandoConsulta = new MySqlCommand(query, connection))
+        //            {
+        //                MySqlDataReader resConsulta = comandoConsulta.ExecuteReader();
+
+        //                while (resConsulta.Read())
+        //                {
+        //                    Propietario propietario = new Propietario();
+        //                    propietario.Id = resConsulta.GetInt32(0);
+        //                    propietario.Nombre = resConsulta.GetString(1);
+        //                    propietario.Apellidos = resConsulta.GetString(2);
+        //                    propietario.NIF = resConsulta.GetString(3);
+        //                    propietario.Fecha_alta = resConsulta.GetDateTime(4);
+        //                    propietario.Email = resConsulta.GetString(5);
+        //                    propietario.Telefono = resConsulta.GetInt64(6);
+        //                    int idDireccion = resConsulta.GetInt32(7);
+        //                    propietario.Direccion = DireccionDataAcces.getDireccion(idDireccion);
+        //                    listaPropietarios.Add(propietario);
+        //                }
+        //                resConsulta.Close();
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        listaPropietarios = null;  // si hay un error de lectura no devuelvo lista                
+        //        Console.WriteLine(ex.ToString());
+        //        MessageBox.Show("Error de conexión con la BBDD", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        //    }
+        //    return listaPropietarios;
+        //}
+
 
 
     }

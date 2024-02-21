@@ -151,53 +151,7 @@ namespace DI_Proyecyo_Final.Services.DataAccess
         }
 
 
-        /// <summary>
-        /// Método que devuelve una lista con todas las propeiddes de la BBDD
-        /// </summary>
-        /// <returns> List<Propiedad> </returns>
-        internal static List<Propiedad> obtenerListaPropiedades()
-        {
-            List<Propiedad> listaPropiedades = new List<Propiedad>();
-            string query = "SELECT propiedades.id, propietario, descripcion, tamaño, observaciones, propiedades.direccion, tipo, nif " +
-                "FROM propiedades, propietarios " +
-                "WHERE propiedades.propietario = propietarios.id;";
-
-            try
-            {
-                using (MySqlConnection connection = new MySqlConnection(ConexionData.CadenaConexion))
-                {
-                    connection.Open();
-
-                    using (MySqlCommand comandoConsulta = new MySqlCommand(query, connection))
-                    {
-                        MySqlDataReader resConsulta = comandoConsulta.ExecuteReader();
-
-                        while (resConsulta.Read())
-                        {
-                            Propiedad propiedad = new Propiedad();
-                            propiedad.Id = resConsulta.GetInt32("id");
-                            propiedad.IdPropietario = resConsulta.GetInt32("propietario");
-                            propiedad.NIFPropietario = resConsulta.GetString("nif");
-                            propiedad.Descripcion = resConsulta.GetString("descripcion");
-                            propiedad.Tamaño = resConsulta.GetInt32("tamaño");
-                            propiedad.Observaciones = resConsulta.GetString("observaciones");
-                            propiedad.TipoPropiedad = (TipoPropiedad)Convert.ToInt32(resConsulta["tipo"]);
-                            int idDireccion = resConsulta.GetInt32("direccion");
-                            propiedad.Direccion = DireccionDataAcces.getDireccion(idDireccion);
-                            listaPropiedades.Add(propiedad);
-                        }
-                        resConsulta.Close();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                listaPropiedades = null;  // si hay un error de lectura no devuelvo lista                
-                Console.WriteLine(ex.ToString());
-                MessageBox.Show("Error de conexión con la BBDD", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            return listaPropiedades;
-        }
+        
 
         /// <summary>
         /// Método que elimina todas las propiedades del propietario con ID facilitada por parámetro 
@@ -266,11 +220,123 @@ namespace DI_Proyecyo_Final.Services.DataAccess
             return exito;
         }
 
+        /// <summary>
+        /// Método que devuelve una lista con todas las propeiddes de la BBDD
+        /// </summary>
+        /// <returns> List<Propiedad> </returns>
+        internal static List<Propiedad> obtenerListaPropiedades()
+        {
+            List<Propiedad> listaPropiedades = new List<Propiedad>();
+            string query = "SELECT propiedades.id, propietario, descripcion, tamaño, observaciones, propiedades.direccion, tipo, nif, " +
+
+                "calle,bloque,piso,localidad,provincia,cod_postal "+
+                "FROM propiedades, propietarios, direcciones " +
+                "WHERE propiedades.propietario = propietarios.id and propiedades.direccion = direcciones.id;";
+
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(ConexionData.CadenaConexion))
+                {
+                    connection.Open();
+
+                    using (MySqlCommand comandoConsulta = new MySqlCommand(query, connection))
+                    {
+                        MySqlDataReader resConsulta = comandoConsulta.ExecuteReader();
+
+                        while (resConsulta.Read())
+                        {
+                            Propiedad propiedad = new Propiedad();
+                            propiedad.Id = resConsulta.GetInt32("id");
+                            propiedad.IdPropietario = resConsulta.GetInt32("propietario");
+                            propiedad.NIFPropietario = resConsulta.GetString("nif");
+                            propiedad.Descripcion = resConsulta.GetString("descripcion");
+                            propiedad.Tamaño = resConsulta.GetInt32("tamaño");
+                            propiedad.Observaciones = resConsulta.GetString("observaciones");
+                            propiedad.TipoPropiedad = (TipoPropiedad)Convert.ToInt32(resConsulta["tipo"]);
+                            propiedad.Direccion = new Direccion();
+                            propiedad.Direccion.Id = resConsulta.GetInt32("direccion");
+                            propiedad.Direccion.Calle = resConsulta.GetString("calle");
+                            propiedad.Direccion.Bloque = resConsulta.GetString("bloque");
+                            propiedad.Direccion.Piso = resConsulta.GetString("piso");
+                            propiedad.Direccion.Localidad = resConsulta.GetString("localidad");
+                            propiedad.Direccion.Provincia = resConsulta.GetString("provincia");
+                            propiedad.Direccion.CodPostal = resConsulta.GetString("cod_postal");
+                            //int idDireccion = resConsulta.GetInt32("direccion");
+                            //propiedad.Direccion = DireccionDataAcces.getDireccion(idDireccion);
+                            listaPropiedades.Add(propiedad);
+                        }
+                        resConsulta.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                listaPropiedades = null;  // si hay un error de lectura no devuelvo lista                
+                Console.WriteLine(ex.ToString());
+                MessageBox.Show("Error de conexión con la BBDD", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            return listaPropiedades;
+        }
+
+
+        /*    rehecho por usar doble consulta y ralentizar               */
+
+        ///// <summary>
+        ///// Método que devuelve una lista con todas las propeiddes de la BBDD
+        ///// </summary>
+        ///// <returns> List<Propiedad> </returns>
+        //internal static List<Propiedad> obtenerListaPropiedades()
+        //{
+        //    List<Propiedad> listaPropiedades = new List<Propiedad>();
+        //    string query = "SELECT propiedades.id, propietario, descripcion, tamaño, observaciones, propiedades.direccion, tipo, nif " +
+        //        "FROM propiedades, propietarios " +
+        //        "WHERE propiedades.propietario = propietarios.id;";
+
+        //    try
+        //    {
+        //        using (MySqlConnection connection = new MySqlConnection(ConexionData.CadenaConexion))
+        //        {
+        //            connection.Open();
+
+        //            using (MySqlCommand comandoConsulta = new MySqlCommand(query, connection))
+        //            {
+        //                MySqlDataReader resConsulta = comandoConsulta.ExecuteReader();
+
+        //                while (resConsulta.Read())
+        //                {
+        //                    Propiedad propiedad = new Propiedad();
+        //                    propiedad.Id = resConsulta.GetInt32("id");
+        //                    propiedad.IdPropietario = resConsulta.GetInt32("propietario");
+        //                    propiedad.NIFPropietario = resConsulta.GetString("nif");
+        //                    propiedad.Descripcion = resConsulta.GetString("descripcion");
+        //                    propiedad.Tamaño = resConsulta.GetInt32("tamaño");
+        //                    propiedad.Observaciones = resConsulta.GetString("observaciones");
+        //                    propiedad.TipoPropiedad = (TipoPropiedad)Convert.ToInt32(resConsulta["tipo"]);
+        //                    int idDireccion = resConsulta.GetInt32("direccion");
+        //                    propiedad.Direccion = DireccionDataAcces.getDireccion(idDireccion);
+        //                    listaPropiedades.Add(propiedad);
+        //                }
+        //                resConsulta.Close();
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        listaPropiedades = null;  // si hay un error de lectura no devuelvo lista                
+        //        Console.WriteLine(ex.ToString());
+        //        MessageBox.Show("Error de conexión con la BBDD", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        //    }
+        //    return listaPropiedades;
+        //}
+
+
+
+
 
 
 
     }
-    
+   
 
 }
 
