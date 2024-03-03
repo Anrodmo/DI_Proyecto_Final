@@ -15,7 +15,7 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{StaticResource MaterialDesignFont}"
         mc:Ignorable="d"
-        Title="Gestion de propiedades" MinHeight="650"  Height="650" MinWidth="1000" Width="1000"
+        Title="Gestion de propiedades" MinHeight="650"   MinWidth="1000"  WindowState="Maximized"
         x:Name="ventanaPrincipal">
 
     <Window.Resources>

@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:DI_Proyecyo_Final"
       xmlns:viewModel="clr-namespace:DI_Proyecyo_Final.ViewModel"
       xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf" 
+      xmlns:cr="clr-namespace:SAPBusinessObjects.WPF.Viewer;assembly=SAPBusinessObjects.WPF.Viewer"
       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
       TextElement.FontWeight="Regular"
       TextElement.FontSize="13"
@@ -666,8 +667,15 @@
                 <!--                                                 TAB INFORMES                                                                       -->
                 <!-- ================================================================================================================================== -->
 
-                <TabItem Header="Informes de usuarios">
-                    <TextBlock Margin="8" Text="PrimaryMid Tab 3" />
+                <TabItem Header="Informes de propietarios" x:Name="tabInformes">
+                   <!--
+                        <cr:CrystalReportsViewer x:Name="reportGeneralPropietarios" />
+                   
+                   --> 
+                    
+                    
+                    
+                    
                 </TabItem>
 
             </TabControl>

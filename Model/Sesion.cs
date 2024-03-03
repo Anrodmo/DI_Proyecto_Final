@@ -37,20 +37,7 @@ namespace DI_Proyecyo_Final.Model
             ConfiguracionUsuarioActivo.guardarConfiguracionEnDisco();
         }
 
-        public static bool permisoAccesoUsuarios()
-        {
-            return usuarioActivo !=null && usuarioActivo.Rol.Equals(Rol.Administrador);
-        }
-
-        public static bool permisoAccesoPropietarios()
-        {
-            return usuarioActivo != null;
-        }
-
-        public static bool permisoAccesoPropiedades()
-        {
-            return usuarioActivo != null;
-        }
+        
 
         
 

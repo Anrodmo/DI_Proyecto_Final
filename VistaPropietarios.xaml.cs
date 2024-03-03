@@ -1,4 +1,6 @@
-﻿using DI_Proyecyo_Final.Model;
+﻿using CrystalDecisions.CrystalReports.Engine;
+using DI_Proyecyo_Final.Model;
+using DI_Proyecyo_Final.Services.Reports;
 using DI_Proyecyo_Final.ViewModel;
 using Google.Protobuf.WellKnownTypes;
 using MahApps.Metro.Controls.Dialogs;
@@ -54,17 +56,8 @@ namespace DI_Proyecyo_Final
             agregarEventoATextBoxesCreacion();  // lo mismo para el boton de crear propietario
 
             dataGridPropietarios.Items.Clear();
-            //listaPropietarios = Propietario.obtenerListaPropietarios();
-            //if (listaPropietarios is null)
-            //{
-            //    txtVentanaEmergente1btn.Text = "Error de conexión";
-            //    miDialogHost1btn.IsOpen = true;
-            //}
-            //else
-            //{   // aqui uso CollectionView porque quiero aplicar filtros al datagrid
-            //    viewPropietarios = (CollectionView)CollectionViewSource.GetDefaultView(listaPropietarios);
-            //    dataGridPropietarios.ItemsSource = viewPropietarios;
-            //}
+
+            
 
 
         }
@@ -626,6 +619,22 @@ namespace DI_Proyecyo_Final
                 {
                     refrescarDataGrid();
                 }
+                //else if (selectedTab != null && selectedTab == tabInformes)
+                //{
+                //    try
+                //    {
+                //        ReportDocument reportDocument = new PropietariosGeneral();
+                //        reportDocument.SetParameterValue("autor", Sesion.UsuarioActivo.NombreUsuario);
+                //        reportGeneralPropietarios.ViewerCore.ReportSource = reportDocument;
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        txtVentanaEmergente1btn.Text = "Error de generación de informe.\nNo se ha podido generar el informe.\n\n" +
+                //            "Si el error persite comuniquelo al departamemento de asistencia.";
+                //        miDialogHost1btn.IsOpen = true;
+                //    }
+
+                //}
             }
         }
 

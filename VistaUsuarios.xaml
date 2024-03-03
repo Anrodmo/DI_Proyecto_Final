@@ -5,7 +5,9 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:DI_Proyecyo_Final"
       xmlns:viewModel="clr-namespace:DI_Proyecyo_Final.ViewModel"
-      xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf" 
+      xmlns:cr="clr-namespace:SAPBusinessObjects.WPF.Viewer;assembly=SAPBusinessObjects.WPF.Viewer"
+      xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
       TextElement.FontWeight="Regular"
       TextElement.FontSize="13"
@@ -427,8 +429,49 @@
                 <!--                                                 TAB INFORMES                                                                       -->
                 <!-- ================================================================================================================================== -->
                 
-                <TabItem Header="Informes de usuarios">
-                    <TextBlock Margin="8" Text="PrimaryMid Tab 3" />
+                <TabItem Header="Informes de usuarios" x:Name="tabInformes">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid  Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid  Grid.Column="0" Grid.ColumnSpan="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="txtNombreUsuarioInforme" VerticalAlignment="Top"  materialDesign:HintAssist.Hint="Nombre de usuario" Grid.Column="0"
+                                    Style="{StaticResource MaterialDesignOutlinedTextBox}" MaxLength="50" Margin="20,10,10,20" materialDesign:TextFieldAssist.HasClearButton="True">
+                                </TextBox>
+                                <DatePicker x:Name="dtpFechaInicioInforme" Grid.Column="1" Width="140"  Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                                            materialDesign:HintAssist.Hint="Fecha de incio" SelectedDate="{x:Static sys:DateTime.Today}"  Margin="0,-10,10,0"/>
+                                <DatePicker x:Name="dtpFechaFinInforme" Grid.Column="2" Width="140"  Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                                            materialDesign:HintAssist.Hint="Fecha de fin" SelectedDate="{x:Static sys:DateTime.Today}"  Margin="0,-10,10,0"/>
+                                <Button x:Name="btnLanzarInformeUsuariosDetallado" Grid.Column="3"  Content="Informe detallado" Style="{StaticResource MaterialDesignRaisedButton}" Height="50"
+                                            ToolTip="Lanza el informe detallado del usuario y fechas seleccionadas"  Click="btnLanzarInformeUsuariosDetallado_Click" Margin="0,-10,0,0"/>
+                            </Grid>
+
+                            <StackPanel Orientation="Horizontal" Grid.Column="3" HorizontalAlignment="Right" >
+                                <Button x:Name="btnLanzarInformeUsuariosGeneral" Grid.Column="3"  Content="Listado de Usuarios" Style="{StaticResource MaterialDesignRaisedButton}" Height="50"
+                                        ToolTip="Lanza el informe detallado del usuario y fechas seleccionadas"  Click="btnLanzarInformeUsuariosGeneral_Click" Margin="0,-10,0,0"/>
+                            </StackPanel>
+
+                        </Grid>
+                        <!--
+                        <cr:CrystalReportsViewer x:Name="reportGeneralUsuarios" Grid.Row="1"/>
+                        -->
+                    </Grid>
+                    
                 </TabItem>
                 
             </TabControl>

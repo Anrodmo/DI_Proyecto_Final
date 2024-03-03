@@ -50,7 +50,7 @@ namespace DI_Proyecyo_Final
             bool loginCorrecto = false;
             string usuario = txtNombreUsuario.Text;
             if (usuario != null && usuario.Length > 0) // si no hay nombre de usuario ya no hago nada más
-            {     // solo  consulto si el login es válido si hay contraseña, si no no.
+            {  // solo  consulto si el login es válido si hay contraseña, si no no.
                 if (txtContraseña.SecurePassword != null && txtContraseña.SecurePassword.Length > 0) 
                 {        // tranmito al modelo y recojo la respuesta          
                     loginCorrecto = Login.loginUsuario(usuario,txtContraseña.SecurePassword);
@@ -61,7 +61,7 @@ namespace DI_Proyecyo_Final
                 }
             }
             if(!loginCorrecto)
-            {
+            {               
                 txtResultadoLogin.Text = "Usuario y/o contraseña incorrectos";
                 resultadoLoginDialogHost.IsOpen = true;
             }

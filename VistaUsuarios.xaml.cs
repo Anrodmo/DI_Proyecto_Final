@@ -1,5 +1,9 @@
-﻿using DI_Proyecyo_Final.Model;
+﻿using CrystalDecisions.CrystalReports.Engine;
+using CrystalDecisions.ReportAppServer;
+using CrystalDecisions.Shared;
+using DI_Proyecyo_Final.Model;
 using DI_Proyecyo_Final.Services.DataAccess;
+using DI_Proyecyo_Final.Services.Reports;
 using DI_Proyecyo_Final.ViewModel;
 using MaterialDesignThemes.Wpf;
 using System;
@@ -32,6 +36,7 @@ namespace DI_Proyecyo_Final
 
         private List<Usuario> listaUsuarios;
         private OperacionActual opActual =0; // aqui guardo la operación que se está realizando
+        private ReportDocument reportDocument = null; // aqui guardo el informe general de usuarios
 
         public VistaUsuarios()
         {
@@ -73,6 +78,8 @@ namespace DI_Proyecyo_Final
             {
                 dataGridUsuarios.ItemsSource = listaUsuarios;
             }
+            
+            
 
         }
 
@@ -762,6 +769,125 @@ namespace DI_Proyecyo_Final
             }
         }
 
+
+        /*==============================================================================================================================*/
+        /*                                         GESTIÓN DE INFORMES DE USUARIOS                                                      */
+        /*==============================================================================================================================*/
+
+        /// <summary>
+        /// Método que carga en el CrystalReportsViewer el informe detallado de usuarios tomando como parámetros las entradas del
+        /// txtNombreUsuarioInforme, dtpFechaInicioInforme  y dtpFechaFinInforme.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnLanzarInformeUsuariosDetallado_Click(object sender, RoutedEventArgs e)
+        {
+            //DateTime fechaInicio = dtpFechaInicioInforme.SelectedDate.Value;
+            //DateTime fechaFin = dtpFechaFinInforme.SelectedDate.Value;
+            //string nombreUsuario = txtNombreUsuarioInforme.Text;
+
+            //try
+            //{                            
+            //    reportDocument = new UsuariosDetalle();             
+            //    //reportDocument.Load("..\\..\\Services\\Reports\\UsuariosDetalle.rpt");
+            //    AssignConnection(reportDocument);
+            //    reportDocument.SetParameterValue("autor", Sesion.UsuarioActivo.NombreUsuario);
+            //    reportDocument.SetParameterValue("nombre_usuario", txtNombreUsuarioInforme.Text);
+            //    reportGeneralUsuarios.ViewerCore.ReportSource = reportDocument;                           
+
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    txtVentanaEmergente1btn.Text = "Error de generación de informe.\nNo se ha podido generar el informe.\n\n" +
+            //        "Si el error persite comuniquelo al departamemento de asistencia."+ex.ToString();
+            //    miDialogHost1btn.IsOpen = true;
+            //}
+
+        }
+
+        private void AssignConnection(ReportDocument rpt)
+        {
+            ConnectionInfo connection = new ConnectionInfo();
+
+            connection.DatabaseName = ""; // myDataBase
+            connection.ServerName = ""; // 127.0.0.1
+            connection.UserID = ""; // root
+            connection.Password = ""; // 12345
+
+            // Primero asignamos la conexión a todas las tablas en el informe principal
+            foreach (CrystalDecisions.CrystalReports.Engine.Table table in rpt.Database.Tables)
+            {
+                AssignTableConnection(table, connection);
+            }
+
+            // Ahora recorremos todas las secciones y sus objetos para hacer lo mismo con los subinformes
+            foreach (CrystalDecisions.CrystalReports.Engine.Section section in rpt.ReportDefinition.Sections)
+            {
+                // En cada sección necesitamos recorrer todos los objetos de informe
+                foreach (CrystalDecisions.CrystalReports.Engine.ReportObject reportObject in section.ReportObjects)
+                {
+                    if (reportObject.Kind == ReportObjectKind.SubreportObject)
+                    {
+                        SubreportObject subReport = (SubreportObject)reportObject;
+                        ReportDocument subDocument = subReport.OpenSubreport(subReport.SubreportName);
+
+                        foreach (CrystalDecisions.CrystalReports.Engine.Table table in subDocument.Database.Tables)
+                        {
+                            AssignTableConnection(table, connection);
+                        }
+
+                        subDocument.SetDatabaseLogon(connection.UserID, connection.Password, connection.ServerName, connection.DatabaseName);
+                    }
+                }
+            }
+            rpt.SetDatabaseLogon(connection.UserID, connection.Password, connection.ServerName, connection.DatabaseName);
+        }
+
+        private void AssignTableConnection(CrystalDecisions.CrystalReports.Engine.Table table, ConnectionInfo connection)
+        {
+            // Almacenar en caché el bloque de información de inicio de sesión
+            TableLogOnInfo logOnInfo = table.LogOnInfo;
+
+            connection.Type = logOnInfo.ConnectionInfo.Type;
+
+            // Establecer la conexión
+            logOnInfo.ConnectionInfo = connection;
+
+            // ¡Aplicar la conexión a la tabla!
+
+            table.LogOnInfo.ConnectionInfo.DatabaseName = connection.DatabaseName;
+            table.LogOnInfo.ConnectionInfo.ServerName = connection.ServerName;
+            table.LogOnInfo.ConnectionInfo.UserID = connection.UserID;
+            table.LogOnInfo.ConnectionInfo.Password = connection.Password;
+            table.LogOnInfo.ConnectionInfo.Type = connection.Type;
+            table.ApplyLogOnInfo(logOnInfo);
+        }
+
+        /// <summary>
+        /// Método que carga en el CrystalReportsViewer el informe del listado de usuarios 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnLanzarInformeUsuariosGeneral_Click(object sender, RoutedEventArgs e)
+        {
+            //try
+            //{
+            //    reportDocument = new UsuariosGeneral();
+            //    //reportDocument.Load("..\\..\\Services\\Reports\\UsuariosGeneral.rpt");
+            //    reportDocument.SetParameterValue("autor", Sesion.UsuarioActivo.NombreUsuario);
+            //    reportGeneralUsuarios.ViewerCore.ReportSource = reportDocument;
+            //}
+            //catch (Exception ex)
+            //{
+            //    txtVentanaEmergente1btn.Text = "Error de generación de informe.\nNo se ha podido generar el informe.\n\n" +
+            //        "Si el error persite comuniquelo al departamemento de asistencia.";
+            //    miDialogHost1btn.IsOpen = true;
+            //}
+
+        }
+
+
         /*==============================================================================================================================*/
         /*                                                      MÉTODOS COMUNES                                                         */
         /*==============================================================================================================================*/
@@ -837,10 +963,11 @@ namespace DI_Proyecyo_Final
                     txtContraseña2.Password = "1";
                     txtNombreUsuario.Text = "1";
                     btnBorrarCampos_Click(null,null);                   
-                }
+                }              
             }
         }
 
+        
     }
 }
 

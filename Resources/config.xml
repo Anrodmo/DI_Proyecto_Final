@@ -3,23 +3,23 @@
   <ConfiguracionUsuarioActivo>
     <ColorPrimario>
       <A>255</A>
-      <R>121</R>
-      <G>85</G>
-      <B>72</B>
+      <R>255</R>
+      <G>152</G>
+      <B>0</B>
       <ScA>1</ScA>
-      <ScR>0.191201687</ScR>
-      <ScG>0.09084171</ScG>
-      <ScB>0.064803265</ScB>
+      <ScR>1</ScR>
+      <ScG>0.313988715</ScG>
+      <ScB>0</ScB>
     </ColorPrimario>
     <ColorSecundario>
       <A>255</A>
       <R>255</R>
-      <G>255</G>
-      <B>0</B>
+      <G>235</G>
+      <B>59</B>
       <ScA>1</ScA>
       <ScR>1</ScR>
-      <ScG>1</ScG>
-      <ScB>0</ScB>
+      <ScG>0.8307699</ScG>
+      <ScB>0.04373503</ScB>
     </ColorSecundario>
     <IsDarkTheme>false</IsDarkTheme>
     <NombreUsuario>angel2</NombreUsuario>

@@ -1,6 +1,9 @@
-﻿using DI_Proyecyo_Final.Model;
+﻿using CrystalDecisions.CrystalReports.Engine;
+using DI_Proyecyo_Final.Model;
 using DI_Proyecyo_Final.Services.DataAccess;
+using DI_Proyecyo_Final.Services.Reports;
 using DI_Proyecyo_Final.ViewModel;
+using SAPBusinessObjects.WPF.Viewer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +33,7 @@ namespace DI_Proyecyo_Final
         private Propiedad propiedadSeleccionada = null;
         private List<Propiedad> listaPropiedades;
         private MensajeroPropiedades2Propietarios mensajero = App.EventoPropiedades2Propietarios;
+        ReportDocument reportDocument = null;
 
         public VistaPropiedades()
         {
@@ -44,20 +48,7 @@ namespace DI_Proyecyo_Final
             // se habilite el boton de modificar
             agregarEventoATextBoxesCreacion();  // lo mismo para el boton de crear propiedad
 
-            dataGridPropiedades.Items.Clear();
-            //listaPropiedades = Propiedad.obtenerListaPropiedades();
-            //if (listaPropiedades is null)
-            //{
-            //    txtVentanaEmergente1btn.Text = "Error de conexión";
-            //    miDialogHost1btn.IsOpen = true;
-            //}
-            //else
-            //{   // aqui uso CollectionView porque quiero aplicar filtros al datagrid
-            //    viewPropiedades = (CollectionView)CollectionViewSource.GetDefaultView(listaPropiedades);
-            //    dataGridPropiedades.ItemsSource = viewPropiedades;
-            //}
-                     
-
+            dataGridPropiedades.Items.Clear();           
         }
 
         
@@ -572,7 +563,45 @@ namespace DI_Proyecyo_Final
             txtProvinciaPropiedadCreacion.TextChanged += TextBox_TextCrearChanged;
         }
 
+        /*==============================================================================================================================*/
+        /*                                                     MÉTODOS INFORMES                                                         */
+        /*==============================================================================================================================*/
 
+        private void btnInformePropiedadesGeneral_Click(object sender, RoutedEventArgs e)
+        {
+            //try
+            //{
+            //    reportDocument = new PropiedadesGeneral();
+            //    reportDocument.SetParameterValue("autor", Sesion.UsuarioActivo.NombreUsuario);
+            //    //reportPropiedades.ViewerCore.ReportSource = reportDocument;
+            //}
+            //catch (Exception ex)
+            //{
+            //    txtVentanaEmergente1btn.Text = "Error de generación de informe.\nNo se ha podido generar el informe.\n\n" +
+            //        "Si el error persite comuniquelo al departamemento de asistencia.";
+            //    miDialogHost1btn.IsOpen = true;
+            //}
+
+
+        }
+
+
+        private void btnInformePropiedadesDetalle_Click(object sender, RoutedEventArgs e)
+        {
+            //try
+            //{
+            //    reportDocument = new PropiedadesDetalle();
+            //    reportDocument.SetParameterValue("autor", Sesion.UsuarioActivo.NombreUsuario);
+            //    //reportPropiedades.ViewerCore.ReportSource = reportDocument;
+            //}
+            //catch (Exception ex)
+            //{
+            //    txtVentanaEmergente1btn.Text = "Error de generación de informe.\nNo se ha podido generar el informe.\n\n" +
+            //        "Si el error persite comuniquelo al departamemento de asistencia.";
+            //    miDialogHost1btn.IsOpen = true;
+            //}
+
+        }
 
         /*==============================================================================================================================*/
         /*                                                     MÉTODOS COMUNES                                                          */
@@ -652,16 +681,18 @@ namespace DI_Proyecyo_Final
                         txtNIFPropiedadCreacion.Text = MensajeroAñadirPropiedad.Nif;
                         MensajeroAñadirPropiedad.Nif = null;
                     }                                 
-                }
-                else if (selectedTab == tabGestionProp)
+                }               
+                else  if (selectedTab != null &&  selectedTab == tabGestionProp)
                 {
                     refrescarDataGrid();
                 }
             }
 
+           
             
         }
 
+        
         
     }
 }

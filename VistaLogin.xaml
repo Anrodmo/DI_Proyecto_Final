@@ -42,6 +42,15 @@
             </StackPanel>
         </materialDesign:DialogHost.DialogContent>
 
+        <materialDesign:DialogHost x:Name="DialogHostCagando" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <materialDesign:DialogHost.DialogContent>
+                <StackPanel>
+                    <TextBlock Text="Tu mensaje aquí"/>
+                    <ProgressBar IsIndeterminate="True" Style="{StaticResource MaterialDesignCircularProgressBar}" Value="0" />
+                </StackPanel>
+            </materialDesign:DialogHost.DialogContent>
+       
+
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -94,6 +103,7 @@
 
 
         </Grid>
+    </materialDesign:DialogHost>
     </materialDesign:DialogHost>
 
 </Page>
