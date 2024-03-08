@@ -16,6 +16,7 @@ namespace DI_Proyecyo_Final.Model
     public class ConfiguracionUsuarioActivo
     {
         private static string rutaArchivo = "..\\..\\Resources\\config.xml";
+        //private static string rutaArchivo = "config.xml";
 
         public Color ColorPrimario { get; set; }
         public Color ColorSecundario { get; set; }

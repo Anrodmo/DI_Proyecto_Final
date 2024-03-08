@@ -192,11 +192,11 @@
                                             Width="25" Height="25" Margin="0,15,0,0"/>
 
                                         <TextBox x:Name="txtNIFPropiedadGestion"  Grid.Column="1" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" 
-                                            materialDesign:HintAssist.Hint="NIF propietario" MaxLength="10" Margin="20,0,0,0" materialDesign:TextFieldAssist.HasClearButton="True" IsEnabled="False" >
+                                            materialDesign:HintAssist.Hint="NIF propietario" MaxLength="9" Margin="20,0,0,0" materialDesign:TextFieldAssist.HasClearButton="True" IsEnabled="False" >
                                             <TextBox.Text>
                                                 <Binding Path="CambioEnTexto.NifPropiedadGestion" UpdateSourceTrigger="PropertyChanged">
                                                     <Binding.ValidationRules>
-                                                        <viewModel:ReglaValidacionObligatorio />
+                                                        <viewModel:ReglaValidacionDNI />
                                                     </Binding.ValidationRules>
                                                 </Binding>
                                             </TextBox.Text>
@@ -465,11 +465,11 @@
                                         Width="25" Height="25" Margin="0,15,0,0"/>
 
                                     <TextBox x:Name="txtNIFPropiedadCreacion"  Grid.Column="1" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" 
-                                        materialDesign:HintAssist.Hint="NIF propietario" MaxLength="10" Margin="20,0,0,0" materialDesign:TextFieldAssist.HasClearButton="True"  >
+                                        materialDesign:HintAssist.Hint="NIF propietario" MaxLength="9" Margin="20,0,0,0" materialDesign:TextFieldAssist.HasClearButton="True"  >
                                         <TextBox.Text>
                                             <Binding Path="CambioEnTexto.NifPropiedadCreacion" UpdateSourceTrigger="PropertyChanged">
                                                 <Binding.ValidationRules>
-                                                    <viewModel:ReglaValidacionObligatorio ValidatesOnTargetUpdated="True" />
+                                                    <viewModel:ReglaValidacionDNI ValidatesOnTargetUpdated="True" />
                                                 </Binding.ValidationRules>
                                             </Binding>
                                         </TextBox.Text>

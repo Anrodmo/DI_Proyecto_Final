@@ -3,23 +3,23 @@
   <ConfiguracionUsuarioActivo>
     <ColorPrimario>
       <A>255</A>
-      <R>255</R>
-      <G>152</G>
-      <B>0</B>
+      <R>158</R>
+      <G>158</G>
+      <B>158</B>
       <ScA>1</ScA>
-      <ScR>1</ScR>
-      <ScG>0.313988715</ScG>
-      <ScB>0</ScB>
+      <ScR>0.341914415</ScR>
+      <ScG>0.341914415</ScG>
+      <ScB>0.341914415</ScB>
     </ColorPrimario>
     <ColorSecundario>
       <A>255</A>
-      <R>255</R>
-      <G>235</G>
-      <B>59</B>
+      <R>0</R>
+      <G>150</G>
+      <B>136</B>
       <ScA>1</ScA>
-      <ScR>1</ScR>
-      <ScG>0.8307699</ScG>
-      <ScB>0.04373503</ScB>
+      <ScR>0</ScR>
+      <ScG>0.3049873</ScG>
+      <ScB>0.246201321</ScB>
     </ColorSecundario>
     <IsDarkTheme>false</IsDarkTheme>
     <NombreUsuario>angel2</NombreUsuario>
@@ -45,7 +45,7 @@
       <ScG>0.396755219</ScG>
       <ScB>0.9046612</ScB>
     </ColorSecundario>
-    <IsDarkTheme>true</IsDarkTheme>
+    <IsDarkTheme>false</IsDarkTheme>
     <NombreUsuario>angel</NombreUsuario>
   </ConfiguracionUsuarioActivo>
   <ConfiguracionUsuarioActivo>

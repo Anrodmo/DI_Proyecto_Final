@@ -663,7 +663,7 @@ namespace DI_Proyecyo_Final
               
                 if ( selectedTab !=null && selectedTab == tabCrearProp)   // para actualizar los errores y vaciar los campos
                 {
-                    txtNIFPropiedadCreacion.Text = "1";
+                    txtNIFPropiedadCreacion.Text = "12345678a";
                     txtDescripcionPropiedadCreacion.Text = "1";
                     txtTamañoPropiedadCreacion.Text = "1";
 

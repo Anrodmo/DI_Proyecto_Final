@@ -600,7 +600,7 @@ namespace DI_Proyecyo_Final
 
                 if (selectedTab == tabCrear)   // para actualziar los errores y vaciar los campos
                 {                 
-                    txtNIFPropietarioCreacion.Text = "1";
+                    txtNIFPropietarioCreacion.Text = "12345678G";
                     txtApellidosPropietarioCreacion.Text = "1";
                     txtNombrePropietarioCreacion.Text = "1";
                     txtEmailPropietarioCreacion.Text= "fff@ggg.com";

@@ -54,6 +54,7 @@ namespace DI_Proyecyo_Final.Model
                 }
                 value= value.Length > 9 ? value.Substring(0, 9) : value; // lo trunco si ocupamas de lo que admite la BBDD
                 string patron = @"^[a-zA-Z]\d{7}[a-zA-Z]$|^\d{8}[a-zA-Z]$";
+                // string patron = @"^[a-zA-Z]\d{5,7}[a-zA-Z]$|^\d{6,8}[a-zA-Z]$";  // lo pongo mas amigable para las pruebas
                 Regex regex = new Regex(patron);
                 nif = regex.IsMatch(value) ? value : "Erróneo"; // si el formato no es válido guardo error (esto no debe llegar a pasar)
             }
