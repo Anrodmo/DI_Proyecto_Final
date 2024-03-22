@@ -10,7 +10,8 @@
     <li>Informes con SAP Cristal Reports</li>
 </ul>
 <div>
-![ejemplo de una de las ventanas de la aplicación](https://github.com/Anrodmo/DI_Proyecto_Final/blob/main/imagen.png)
+![ejemplo de una de las ventanas de la aplicación](https://raw.githubusercontent.com/Anrodmo/DI_Proyecto_Final/main/imagen.png)
+    
 </div>
 <p>Nota: Los datos que aparecen en las capturas de pantalla son totalmente inventados</p>
 
