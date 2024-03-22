@@ -9,11 +9,7 @@
     <li>Cifrado (hash) de contraseñas, protección contra injecciones SQL</li>
     <li>Informes con SAP Cristal Reports</li>
 </ul>
-<div>
-![ejemplo de una de las ventanas de la aplicación](https://github.com/Anrodmo/DI_Proyecto_Final/blob/main/imagen.png?raw=true)
-    
-</div>
-<p>Nota: Los datos que aparecen en las capturas de pantalla son totalmente inventados</p>
+
 
 
  
