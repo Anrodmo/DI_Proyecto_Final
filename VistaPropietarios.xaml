@@ -402,7 +402,7 @@
 
                                
                                 <Button x:Name="btnBorrarPropietario" Margin="10" Content="Borrar Propietario" Style="{StaticResource MaterialDesignRaisedSecondaryLightButton}"
-                                    ToolTip="Resource name: MaterialDesignRaisedSecondaryLightButton" IsEnabled="False" Click="btnBorrarPropietario_Click"/>
+                                    ToolTip="elimina el propietario de la BBDD, ¡precaución!" IsEnabled="False" Click="btnBorrarPropietario_Click"/>
 
                             </StackPanel>
                         </Grid>
@@ -652,7 +652,7 @@
                         <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Bottom">
                             
                             <Button x:Name="btnBorrarCamposPropitario" Margin="10,10,10,0" Content="Borrar campos" Style="{StaticResource MaterialDesignRaisedButton}"
-                                ToolTip="Vacia todos os campos del formulario" Click="btnBorrarCamposPropietario_Click"/>
+                                ToolTip="Vacia todos los campos del formulario" Click="btnBorrarCamposPropietario_Click"/>
                             <Button x:Name="btnCrearPropietario" Margin="10" Content="Crear Propietario" Style="{StaticResource MaterialDesignRaisedSecondaryLightButton}"
                                 ToolTip="Crea el propietario en la base de datos" IsEnabled="False" Click="btnCrearPropietario_Click"/>
 

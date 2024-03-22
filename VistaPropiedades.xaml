@@ -390,14 +390,14 @@
                                 <Button x:Name="btnEditarPropiedad" Margin="10,10,10,0" Content="Editar propiedad" Style="{StaticResource MaterialDesignRaisedButton}"
                                 ToolTip="Habilita  la edicion de l apropiedad seleccionada" Click="btnEditarPropiedad_Click" IsEnabled="False" />
                                 <Button x:Name="btnGuardarPropiedad" Margin="10" Content="Guardar propiedad" Style="{StaticResource MaterialDesignRaisedSecondaryLightButton}"
-                                ToolTip="Actualizar la BBDD con la nueva propeidad" IsEnabled="False" Click="btnGuardarPropiedad_Click"/>
+                                ToolTip="Actualizar la BBDD con la nueva propiedad" IsEnabled="False" Click="btnGuardarPropiedad_Click"/>
                             </StackPanel>
 
                             <StackPanel Orientation="Vertical"  VerticalAlignment="Bottom" Grid.Row="2">
 
 
                                 <Button x:Name="btnBorrarPropiedad" Margin="10" Content="Borrar Propiedad" Style="{StaticResource MaterialDesignRaisedSecondaryLightButton}"
-                                ToolTip="Resource name: MaterialDesignRaisedSecondaryLightButton" IsEnabled="False" Click="btnBorrarPropiedad_Click"/>
+                                ToolTip="Borra la propiedad seleccionada de la BBDD" IsEnabled="False" Click="btnBorrarPropiedad_Click"/>
 
                             </StackPanel>
                         </Grid>
@@ -633,7 +633,7 @@
                         <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Bottom">
 
                             <Button x:Name="btnBorrarCamposPropiedad" Margin="10,10,10,0" Content="Borrar campos" Style="{StaticResource MaterialDesignRaisedButton}"
-                            ToolTip="Vacia todos os campos del formulario" Click="btnBorrarCamposPropiedad_Click"/>
+                            ToolTip="Vacia todos los campos del formulario" Click="btnBorrarCamposPropiedad_Click"/>
                             <Button x:Name="btnCrearPropiedad" Margin="10" Content="Crear Propiedad" Style="{StaticResource MaterialDesignRaisedSecondaryLightButton}"
                             ToolTip="Crea la propiedad en la base de datos" IsEnabled="False" Click="btnCrearPropiedad_Click"/>
 

@@ -412,11 +412,11 @@
 
                         <StackPanel Orientation="Vertical" Grid.Column="2" VerticalAlignment="Bottom">
                             <Button x:Name="btnValidarCampos" Margin="10,10,10,0" Content="Validar nombre de usuario" Style="{StaticResource MaterialDesignRaisedButton}"
-                                ToolTip="Resource name: MaterialDesignRaisedSecondaryLightButton" Click="btnValidarCampos_Click"/>
+                                ToolTip="Valida que el nombre del usuario no esté siendo utilizado." Click="btnValidarCampos_Click"/>
                             <Button x:Name="btnBorrarCampos" Margin="10,10,10,0" Content="Borrar campos" Style="{StaticResource MaterialDesignRaisedButton}"
-                                ToolTip="Resource name: MaterialDesignRaisedSecondaryLightButton" Click="btnBorrarCampos_Click"/>
+                                ToolTip="Borra todos los campos del formulario" Click="btnBorrarCampos_Click"/>
                             <Button x:Name="btnCrearUsuario" Margin="10" Content="Crear Usuario" Style="{StaticResource MaterialDesignRaisedSecondaryLightButton}"
-                                ToolTip="Resource name: MaterialDesignRaisedSecondaryLightButton" IsEnabled="False" Click="btnCrearUsuario_Click"/>
+                                ToolTip="añade el usuario a la bade de datos" IsEnabled="False" Click="btnCrearUsuario_Click"/>
                             
                         </StackPanel>
 
